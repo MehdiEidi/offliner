@@ -5,7 +5,7 @@ Offliner is a tool to make a whole website offline viewable. It's a concurrent w
 ### Todo
 * Fetch the URL
 * Extract Links
-* Save the page
+* Save the page (including resources like img, css, js, ...)
 * Concurrency using Processes
 * IPC 
 * Concurrency using goroutines
