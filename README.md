@@ -12,3 +12,4 @@ Offliner is a tool to make a whole website offline viewable. It's a concurrent w
 * set max-concurrency
 * set max-page
 * make pages offline viewable (edit links)
+* Neat CLI (maybe a progress bar or sth)
