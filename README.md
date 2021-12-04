@@ -8,7 +8,7 @@ Offliner is a tool to make a whole website offline viewable. It's a concurrent w
 * Save the page (including resources like img, css, js, ...)
 * Concurrency using Processes
 * IPC 
-* Concurrency using goroutines
+* Concurrency using goroutines, channels, ...
 * set max-concurrency
 * set max-page
 * make pages offline viewable (edit links)
