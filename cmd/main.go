@@ -16,11 +16,14 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var a = 1
+// var a = 1
 
 var queue []string
 
 var visited = make(map[string]bool)
+
+// var visited sync.Map
+
 var lock sync.RWMutex
 
 var wg sync.WaitGroup
@@ -33,9 +36,10 @@ func main() {
 		log.Fatal("home page URL cannot be empty")
 	}
 
-	wg.Add(1)
+	// wg.Add(1)
 
 	visited[*homepage] = true
+	// visited.Store(*homepage, true)
 
 	process(*homepage)
 
@@ -45,25 +49,27 @@ func main() {
 		go process(link)
 	}
 
+	// time.Sleep(30 * time.Second)
 	wg.Wait()
 }
 
 func process(link string) error {
+	defer wg.Done()
+
 	fmt.Println("Visiting:", link)
 	lock.Lock()
 	visited[link] = true
 	lock.Unlock()
+	// visited.Store(link, true)
 
 	res, err := http.Get(link)
 	if err != nil {
-		wg.Done()
 		return err
 	}
 	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
-		wg.Done()
 		return err
 	}
 
@@ -71,7 +77,6 @@ func process(link string) error {
 
 	document, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
-		wg.Done()
 		return err
 	}
 	document.Find("a").Each(getLink)
@@ -80,13 +85,16 @@ func process(link string) error {
 
 	download(res.Body, link)
 
-	wg.Done()
 	fmt.Println("Finished:", link)
 	return nil
 }
 
 func getLink(index int, element *goquery.Selection) {
 	href, exists := element.Attr("href")
+	if len(href) > 1 && href[len(href)-1] == '/' {
+		href = href[:len(href)-1]
+	}
+
 	if exists {
 		if strings.Contains(href, "urmia") {
 			lock.RLock()
@@ -95,6 +103,10 @@ func getLink(index int, element *goquery.Selection) {
 				queue = append(queue, href)
 				wg.Add(1)
 			}
+			// if _, ok := visited.Load(href); !ok {
+			// 	queue = append(queue, href)
+			// 	wg.Add(1)
+			// }
 		}
 	}
 }
@@ -127,10 +139,10 @@ func getLink(index int, element *goquery.Selection) {
 // 	return re.FindAllString(cont, -1)[5:]
 // }
 
-func download(body io.ReadCloser, link string) {
+func download(body io.ReadCloser, link string) error {
 	URL, err := url.Parse(link)
 	if err != nil {
-		fmt.Println(err)
+		return err
 	}
 	fileName := URL.Query().Get("name")
 
@@ -148,12 +160,14 @@ func download(body io.ReadCloser, link string) {
 
 	file, err := os.Create("./pages/" + fileName + ".html")
 	if err != nil {
-		log.Println("download - filecreation - ", err)
+		return err
 	}
 	defer file.Close()
 
 	_, err = io.Copy(file, body)
 	if err != nil {
-		log.Println("download - copy - ", err)
+		return err
 	}
+
+	return nil
 }
