@@ -5,68 +5,71 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
-	"sync"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-// var a = 1
+var (
+	// stack of URLs
+	stack []string
 
-var queue []string
+	// set of visited URLs
+	visited = make(map[string]bool)
 
-var visited = make(map[string]bool)
-
-// var visited sync.Map
-
-var lock sync.RWMutex
-
-var wg sync.WaitGroup
+	baseDomain string
+)
 
 func main() {
-	homepage := flag.String("url", "", "URL of the home page.")
+	homepage := flag.String("url", "", "URL of the homepage.")
+	multiProcessing := flag.Bool("a", false, "If the concurrency must be done using multi processing instead of multi threading.")
+	serial := flag.Bool("s", false, "If the crawling must be done in non-concurrent fashion.")
+	// maxPage := flag.Int("n", math.MaxInt, "Max number of pages to crawl.")
+	// maxConcurrency := flag.Int("p", 10, "Max number of concurrent execution units.")
+
 	flag.Parse()
 
 	if *homepage == "" {
-		log.Fatal("home page URL cannot be empty")
+		log.Fatal("homepage URL cannot be empty.")
 	}
 
-	// wg.Add(1)
+	baseDomain = findBase(*homepage)
 
 	visited[*homepage] = true
-	// visited.Store(*homepage, true)
 
-	process(*homepage)
-
-	for len(queue) != 0 {
-		link := queue[0]
-		queue = queue[1:]
-		go process(link)
+	err := processHome(*homepage)
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	// time.Sleep(30 * time.Second)
-	wg.Wait()
+	// serial,multi threading or multi processing ?
+	if *serial {
+		fmt.Println("in serial")
+		for len(stack) != 0 {
+			url := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+			err = serialProcess(url)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+	} else if *multiProcessing {
+
+	} else {
+
+	}
 }
 
-func process(link string) error {
-	defer wg.Done()
+func processHome(homepage string) error {
+	fmt.Println("Visiting:", homepage)
 
-	fmt.Println("Visiting:", link)
-	lock.Lock()
-	visited[link] = true
-	lock.Unlock()
-	// visited.Store(link, true)
-
-	res, err := http.Get(link)
+	res, err := http.Get(homepage)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -79,86 +82,58 @@ func process(link string) error {
 	if err != nil {
 		return err
 	}
-	document.Find("a").Each(getLink)
+	document.Find("a").Each(processLink)
 
-	res.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	res.Body = io.NopCloser(bytes.NewBuffer(body))
 
-	download(res.Body, link)
+	err = save(res.Body, homepage)
+	if err != nil {
+		return err
+	}
 
-	fmt.Println("Finished:", link)
+	fmt.Println("Finished:", homepage)
+
 	return nil
 }
 
-func getLink(index int, element *goquery.Selection) {
-	href, exists := element.Attr("href")
+func processLink(index int, element *goquery.Selection) {
+	href, ok := element.Attr("href")
+
 	if len(href) > 1 && href[len(href)-1] == '/' {
 		href = href[:len(href)-1]
 	}
 
-	if exists {
-		if strings.Contains(href, "urmia") {
-			lock.RLock()
-			defer lock.RUnlock()
-			if _, ok := visited[href]; !ok {
-				queue = append(queue, href)
-				wg.Add(1)
-			}
-			// if _, ok := visited.Load(href); !ok {
-			// 	queue = append(queue, href)
-			// 	wg.Add(1)
-			// }
+	if ok && strings.Contains(href, baseDomain) {
+		if _, ok := visited[href]; !ok {
+			stack = append(stack, href)
 		}
 	}
 }
 
-// func content(url string) string {
-// 	res, err := http.Get(url)
-// 	if err != nil {
-// 		log.Println("getContent - Request - ", err)
-// 	}
-// 	defer res.Body.Close()
-
-// 	temp, _ := httputil.DumpResponse(res, true)
-// 	b := bytes.NewBuffer(temp)
-
-// 	document, _ := goquery.NewDocumentFromReader(res.Body)
-// 	document.Find("a").Each(getLink)
-
-// 	content, err := io.ReadAll(b)
-// 	if err != nil {
-// 		log.Println("getContent - ReadAll - ", err)
-// 	}
-
-// 	download(res.Body, url)
-
-// 	return string(content)
-// }
-
-// func links(cont string) []string {
-// 	re := regexp.MustCompile(`href="[[:graph:]^"]*"`)
-// 	return re.FindAllString(cont, -1)[5:]
-// }
-
-func download(body io.ReadCloser, link string) error {
-	URL, err := url.Parse(link)
-	if err != nil {
-		return err
-	}
-	fileName := URL.Query().Get("name")
-
-	if fileName == "" {
-		URLPath := URL.Path
-		segments := strings.Split(URLPath, "/")
-		fileName = segments[len(segments)-1]
+func findBase(homepage string) string {
+	if homepage[len(homepage)-1] == '/' {
+		homepage = homepage[:len(homepage)-1]
 	}
 
-	if fileName == "" {
-		// fileName = strconv.Itoa(a)
-		// a++
-		fileName = link[8 : len(link)-6]
+	if strings.Contains(homepage, "http://") {
+		return homepage[7:]
+	} else if strings.Contains(homepage, "https://") {
+		return homepage[8:]
+	} else {
+		return homepage
+	}
+}
+
+func save(body io.ReadCloser, url string) error {
+	var filename string
+
+	if strings.Contains(url, "http://") {
+		filename = url[7:]
+	} else {
+		filename = url[8:]
 	}
 
-	file, err := os.Create("./pages/" + fileName + ".html")
+	file, err := os.Create("./pages/" + filename + ".html")
 	if err != nil {
 		return err
 	}
@@ -168,6 +143,41 @@ func download(body io.ReadCloser, link string) error {
 	if err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func serialProcess(url string) error {
+	fmt.Println("Visiting:", url)
+
+	visited[url] = true
+
+	res, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
+	res.Body = io.NopCloser(bytes.NewBuffer(body))
+
+	document, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return err
+	}
+	document.Find("a").Each(processLink)
+
+	res.Body = io.NopCloser(bytes.NewBuffer(body))
+
+	err = save(res.Body, url)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Finished:", url)
 
 	return nil
 }

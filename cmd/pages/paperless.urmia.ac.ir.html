@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<style>
+	#simplemodal-container a.modalCloseImg {background:url(images/userLogin/softwaresInfoClose.png) no-repeat; width:16px; height:16px; display:inline; z-index:3200; position:absolute; top:3px; left:3px; cursor:pointer;}
+</style>
+<html>
+	<head>
+		<meta name="vs_defaultClientScript" content="JavaScript" />
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="TITLE" content="مجموعه نرم‌افزاری دیدگاه" />
+		<meta name="DESCRIPTION" content="مجموعه نرم افزاری دیدگاه, دانشگاه ارومیه" />
+		<meta name="AUTHOR" content="Chargoon Co.">
+		<meta name="LANGUAGE" content="fa" />
+		<meta name="DOCUMENTCOUNTRYCODE" content="ir" />
+		<title>Didgah Login</title>
+
+		<link rel="shortcut icon" href="./Images/favIconDidgah.ico")>
+		<script language="javascript" src="./include/domManipulator.min.js"></script>
+		<script language="javascript" src="./include/routines.js?rnd=490785135216"></script>
+		<script language="javascript" src="./include/json2.js"></script>
+		<script language="javascript" src="./include/dynamicRoutines.js.aspx"></script>
+		<script language="javascript" src="./include/encryption.js?rnd=490785135216"></script>
+		<script language="javascript" src="./include/Styles.js?rnd=490785135216"></script>
+		<script type="text/javascript" src="include/listSelect.js"></script>
+		<script language="javascript" src="./include/jquery.simplemodal.js"></script>
+		<script>
+			var key;
+			var authenticationType = null;
+			var checkedUserName = null;
+
+			function initKey() {
+				setMaxDigits(131);
+				key = new RSAKeyPair("010001", "", "CDF76F7D4FA8231E95868B1844F3679C097FE45923E006673102551741D860C378C80E9193FECD9A6AB5EE834E63A4BF18798C8BEA687746BC0941CF8017980E5A0A2ABC085FB002630EC9C597E22273450B5A074E73429EE8CCE97D10BDE1743536A1EC5B01F718FE13FFAD1E357FE7D780908493ECB730A43F9A26B51E3FE3");
+			}
+
+			function validateSubmit() {
+				if ($("#txtClientUsername")[0].value == "") {
+					setFocus($("#txtClientUsername")[0]);
+					return false;
+				} else if (authenticationType == null) {
+					if (checkedUserName != $("#txtClientUsername")[0].value)
+						checkUserName();
+				
+					setTimeout(validateSubmit, 200);
+					return false;
+				}
+				
+				if($("#txtClientPassword").length > 0)
+					$("#txtClientPassword")[0].blur();
+
+				var password = $("#txtClientPassword").length > 0 ? $("#txtClientPassword")[0].value : "";
+				$("#txtAuthenticationString")[0].value = generateAuthenticationString(password);
+					
+
+	
+
+				if (authenticationType != "Token") {
+					$("#txtClientPassword")[0].value='';
+				}
+
+				$("#txtClientUsername")[0].value='';
+				$("#cmdLogin")[0].click();
+			}
+			
+			function generateAuthenticationString(password) {
+				if (!password)
+					password = '';
+
+				initKey();
+				return encryptedString(key, "mQWQpJwjizsIkLXADpQBALvK1uA=\\" + base64encode($("#txtClientUsername")[0].value) + "\\" + base64encode(password));
+			}
+		
+			function checkUserName() {
+				if ($("#txtClientUsername")[0].value.length != 0) {
+					if (checkedUserName == $("#txtClientUsername")[0].value)
+						return;
+
+					authenticationType = null;
+					checkedUserName = null;
+					var authenticationString = generateAuthenticationString(new Date().getMilliseconds().toString())
+					getServerResponseAsync("Common", "GetUserAuthenticationType", "authenticationString=" + authenticationString, getUserAuthenticationTypeHandler);
+				}
+			}
+
+			function getUserAuthenticationTypeHandler(userAuthenticationType) {
+				authenticationType = userAuthenticationType;
+				checkedUserName = $("#txtClientUsername")[0].value;
+
+				if (authenticationType == "CAS" && messageBox("YouMustLoginViaCAS", "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.question + eMessageBoxStyle.yesNo) == "yes") {
+					window.location.href = "/login?service=http://paperless.urmia.ac.ir/CASGateway.aspx";
+				}
+			}
+
+			function capLock(e) {
+				kc = e.keyCode ? e.keyCode : e.which;
+				sk = e.shiftKey ? e.shiftKey : ((kc == 16) ? true : false);
+				if(((kc >= 65 && kc <= 90) && !sk)||((kc >= 97 && kc <= 122) && sk))
+					$('#divCapsLock')[0].style.visibility = 'visible';
+				else
+					$('#divCapsLock')[0].style.visibility = 'hidden';
+			}
+
+			function downloadTokenTool() {
+				
+			}
+
+			function tokenLogin() {
+				if(!Dastine.isInstalled) {
+					messageBox("TokenLoginIsImpossible.PleaseMakeSureYouHaveInstalledRequiredClientSideTools.", "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.exclamation);
+					return false;
+				}
+
+				var dastineResult = -1;
+
+				try {
+					Dastine.SelectCertificateFromTokenByUI("", "Client_Authentication", function(event) { dastineResult = event.data.Result; });
+
+					if (dastineResult == 18) {
+						return false;
+					} else if (dastineResult == 25) {
+						messageBox("NoCertificateWasFound", "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.exclamation);
+						return false;
+					} else if (dastineResult != 00) {
+						messageBox("Certificate Selection Error: " + dastineResult, "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.exclamation);
+						return false;
+					}
+				} catch(e) {
+					messageBox("Certificate Selection Exception: " + e.message, "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.critical);
+					return false;
+				}
+
+				dastineResult = -1;
+
+				try {
+					Dastine.CmsSign("mQWQpJwjizsIkLXADpQBALvK1uA=", false, function(event) { dastineResult = event.data.Result; });
+					if (dastineResult.length > 2) {
+						$("#txtSignature")[0].value = dastineResult;
+						return true;
+					} else if (dastineResult == 13 || dastineResult == 18) {
+						return false;
+					} else if (dastineResult == 14) {
+						messageBox("PinIsNotCorrect.", "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.critical);
+						return false;
+					} else {
+						messageBox("Signing Error: " + dastineResult, "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.critical);
+						return false;
+					}
+				} catch (e) {
+					messageBox("Signing Exception: " + e.message, "b90f03a0-5b3b-4027-b9ec-247c2d6ddaac", eMessageBoxStyle.critical);
+					return false;
+				}
+			}
+
+		    function refreshValidationImage() {
+		        document.getElementById("validationImage").src = "images/blank.gif";
+		        setTimeout( function() {document.getElementById("validationImage").src = "./Applications/Common/Pages/ValidationImage.aspx?"}, 1000);
+            }
+		</script>
+		<link href="./include/CSS/styles.aspx" type="text/css" rel="stylesheet">
+
+		<style>
+			.tblErrorBox {
+				width:199px;
+				border-spacing: 0;
+			}
+  
+			.trErrorBox_top {
+				height: 28px;
+				background-image: url(./images/userLogin/enterprise/errorBox_top.png);
+
+				background-repeat: no-repeat;
+			}
+  
+			.trErrorBox_middle {
+				background-image: url(./images/userLogin/enterprise/errorBox_middle.png);
+				background-repeat: repeat-y;
+			}
+  
+			.trErrorBox_middle td {
+					padding: 5px;
+					padding-right: 18px;
+					text-align: center;
+					color: firebrick;
+			}
+  
+			.trErrorBox_bottom {
+				height: 9px;
+				background-image: url(./images/userLogin/enterprise/errorBox_bottom.png);
+				background-repeat: no-repeat;
+			}
+		</style>
+
+	</head>
+	<body id="iBody" class="genericBody" style="overflow:hidden;">
+        <form method="post" action="./UserLogin.aspx" id="frmLogin" autocomplete="off">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTg1MTk4MDc4NQ8WAh4VSXNQa2lMaWNlbnNlQXZhaWxhYmxlaBYCZg9kFgwCBw8WAh4JaW5uZXJodG1sBcUDPHVsIHN0eWxlPSdsaW5lLWhlaWdodDoxLjUnPjxsaSBzdHlsZT0nbGlzdC1zdHlsZS10eXBlOmNpcmNsZTsgZm9udC1zaXplOjMwcHg7IGNvbG9yOiM2ZThkY2M7Jz48YSBocmVmPWh0dHBzOi8vd3d3LmNoYXJnb29uLmNvbS9vZmZpY2UtYXV0b21hdGlvbiB0YXJnZXQ9X2JsYW5rIHN0eWxlPSdjb2xvcjojNmU4ZGNjOyB0ZXh0LWRlY29yYXRpb246bm9uZTsgZm9udC1zaXplOjhwdDsnPtix2KfZh9qp2KfYsSDYp9iq2YjZhdin2LPbjNmI2YYg2KfYr9in2LHbjDwvYT48L2xpPjxicj48YSBocmVmPWh0dHBzOi8vd3d3LmNoYXJnb29uLmNvbS9kaWRnYWgvb2ZmaWNlL2RvY3VtZW50LW1hbmFnZXIgdGFyZ2V0PV9ibGFuayBzdHlsZT0nY29sb3I6Z3JheTsgdGV4dC1kZWNvcmF0aW9uOm5vbmU7IGZvbnQtc2l6ZTo4cHQ7Jz7Zhtix2YXigIzYp9mB2LLYp9ixINmF2YPYp9iq2KjYp9iqPC9hPjwvdWw+ZAIID2QWBGYPFgQeA3NyYwWGP2RhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBSlVBQUFCNENBWUFBQUQ3ZUxBVEFBQUFBWE5TUjBJQXJzNGM2UUFBQUFSblFVMUJBQUN4and2OFlRVUFBQUFKY0VoWmN3QUFEc01BQUE3REFjZHZxR1FBQUJjb1NVUkJWSGhlN1YwTHVDUkZkUjd6TW0rRkpJUVlvNERzN25UMzdDSVlORWpRS0tob1JBVUNyQ1FnanhnbFVZTkl4RWZBSnlxSUNPRWhhcUlncUNpUEZSQUZvN2lHaHdwS0NHWURHM0VYTml4a1hZUUZGMWg4blBiL3o2bWFXLzJhTzNQdjNEdHo3NjMvKzg3WDAxWFYxVDFkZjFlZE9uV3FxaFVSRVJFUkVSRVJFUkVSRVJFUkVSRVJNUW55eDdWMnpuL0RuY3c4ZHBEZmIzVmtyMVltdTdtUWlIbUhuZk5mYVNWeWRTdk52OTVLNVNRVStBRTQzOHJGRGdkUGtWOERpZmFEckVUZTk3VjJ5blBjNndRWEd6RXZrY3BYdEtDWE9zbmtUc2lIUUlDbnVCUlR3MkxaR25sL0FIbmQzdXI0dkNIOG5jbytMbFhFdkVRaW45QUNUNTJ3MEpkcHdmOFFjbVpybWZ5QlM5ay8wdnhWSU5NNnpWZEpGQWpQMjdLdlN4a3hMNUhLdVFWU2VXR3RRbkoxdE9iNko1ZTZONUw4RDVIZkpVcWNNcG04UkZJdEFEU1J5Z3RKUUhJbGNvYTdvaDdMNUVuSWE0M1ZjajNFU1BVS2QxWEV2RVNaVkt5aDZrakdzRVErNXE0cVludjVIZFJtMzZ4Y1Y1ZVhuc3NiM1pVUjh4S2hUa1VTcFBKL0NQdTAvdGJ6SUU2SmxYL1NYV21nU1NLVjYydkprOGovUTE2UCtJM2R2QmllSWYrSWVZeEV2dFRWZjR3SW4zZmhmNDNDZjZ5aUcxbFQrSHBOUTdUbHJFcVR4MnRZY3kyUlJab21KSjBlNVhJTmo1aW5ZSUdIcEVybGVCY0R3dVM3Z0J6Zkt4QkxmNk5ueUNZdnlmYzBBZ1h4UnN3dnQ3WU5qS3FwWE5vbGxWMy92ZGErK1MrNTJJaDVoVDN5eDRNQVB5ZzFUVzkzc1laRnNoMUlzTGxDbkZTTm1hc3FoTXRrUFdxdmJkM1Zoa1JPNzVKSzgwRnpTRHRXeER3RTlhRUVPbFJJcWtUZTVHSW5rTWpMS2pWUytaeS9NL2tKZnUvdXJwcEFLc3U3NUROU1BkeGFuRC9WeFViTUs3UWxRd0dUQ0ZiZ2RUV1ZSeW9uRjJxbHNsanRkWnBMWFFTSkZwSXFrMGVoYnkxMnNSSHpDcWtjM0cyV1BER1NCbEl0bHQ5RytvMjF4TExhWjdNYVArdVF5QjdGNjBEa0pkSnhzUkh6Q20xSlVjRDNkNXV4WHFRaVV2VDBRaEo2c2V2T2NhbXFhTXNMQ3FUSzVPYzQzOFhGUnN3cnNBZldsclVGVXFYeVpoZGJSU292cXErcDVHY2cxVE5kcWlvU09iWkxScXZWSGtYWTlBYXNJOFlWT1F2ODIxMmk2RkZXdU1ncTJBUW1jbGVYaEJNa2VhVFZrVDkycWFwSUFxdTkzV050YTd2OGQxMXN4THdEQjREREFrL2tWaGRUajFTdTZLYWZ1T1pPa09vM1hZb2lXQnNtY25PWHVGWWJYdXhpSjVESk5naC9IbzdQVm1lK2lERUVDN21ESGxZcS82Q0ZtTXBsa1BPZ1RMOERCWGNRQ25tSnBtdm54eFdhcGt3MmFhK3dDYncrSkpXUnBObEN6aHFNelYweC9RcmM0K2s0bm9yN1hZSGpkMEM4KzVSNGZJWkVOa0QrRStGZmdad0hlUjVxMVdnc0hSbW85eVJ5UG81cklWU0lyU0RMWW5yTnRaQnZGWm96SFhLUnQ3amNxa2psR0UyakJJVFF3UytSVTF4c0ZVeXY5d3NGelNXUC9sazhtWHc4ZjRmUHJYRnlDK1E5cmFmbVQzQTVSOHc0c3Z5NWVPa3J1NFZSTHFpeStJS2poT0c4TnBWL2Q3bFcwYzVmamRybnAwZ0R5UjlvTFlXTzFjdnJJR3o2UXVuMWJIWGkvMWNtYTNDL1k5Uy9QbUtHa01relVFQ2YwMEpTUWpRSTQvc3BTRTBuRDRNTXozZDNLTUtzOER1cWNEaUd6U3g5M2V1UXlRc2hKRi85dlNqK3VldWtMajNKWmJYcHltaEFuUWtrK2Z1N1gzQlRBZmdDU21nNVIzUG96eWxOSkdNY201c201YnNmVUVGUGEzeXN3bnRRMkp1a3B3U3Q4VzA1Q3I5UGg1d0RPUmRoRDFhZTBaT3d3Nlk3MzhuZExXSm9TT1J0cUFrMjFSYWNGZ1lVNGt6ZWgzVDBhV3FyMTBFaVIwQk94UG0vUXN5UHZJNWNrK2xXa3lHUjE5WStGNGx1ei9ZWlBOdVI2dTFRQnhJNmszc0t6MmJYUFlhOHErT1RFVU1FaWRKQno2NWNnRHduZVhwaEozVGRNeWpacWZ5NGNqMUpsY2k3WE1yQmtjbExJVDh2NU1sN2RHUVZ3dmR6cVJvQWZTbVZxd3JQUkVKMWtGOGloN3RFRVRPT1RNNm9GRUlHc2pUcFJpRm9HOHJraTkzcjdWcDI4YmQzS2FZRzlrSjlubnFVOC9veWVySVoxSnJTaVJKS3I0ZUNIakc3U09YakJXSnBVeVByVzR2bGoxeUszdkQrNmxaTG5lcENwdzZiWGJQWk5hVW51OURlU09ScGVPYWlMc1ZuNmpVbUdUR0RNT1g0R3dWaVdRMnhRb2RrK2tFcUY2SkFIK2liaUpPQmVsbWEzK1RPZW1PUC9KZVIvbXVWNTQ4KzdTUEdvdnozVUFoRkYyQ3JlWTUxS1hyanlmbmpXMHZ5NTdxejRhQ3ZYcVIrRU1XWlBkYms0YjlNb3hjYU1TU2tzaXNLWWt1M0NURWRpYjJtbDdrVTQ0Y0V2ZFJRajZLUVlHMzVTNWNpWXVSb3k5a1ZaWmZ1dnVOSXJEUS96cDR2ZUY2clhkSHNSY3Y1K0lETllDTDNGcG9USTlZVzFHVExYYXJoZ2ZyUW9OZ1pQY0hNR1hCRFFsa0g0MDZkOVJ3eFptakxzMUE0UlJkZ0ZwNFYyaG1UVGo2Z0xrTmJGczBTbVp5UFk3UGRTNzFJODY4ajNUdVI3cG1OUmsyQ2NXbithcEQ3KzdWTlhpWS9Ra2ZoR1M1MXhOakJiRkQzRjRnMVVYZ1BhVTFCWC9WRTlnWXhka2JjbitoMTdmeTNFSFl6MHR5blJMVG1DUGswS00yMG9Qc2xpWlM0Y2pmQ0R0QTRjM1BaQjNJODVGTUl2MHZUMVQvVHZVUHZLRVRNQU9nT3c2K2ZoUllXSWd1ZllXRUJkK1JocEQvTTljWldkNjloV2xySW05eUdVN21oUUJJU0xKTkROQzZSZFVwS2Z5L201ZE4xQlhsbmNuMmNFREdYWUxPTkw2a1daaUFUTmRLWDlCcXVzeEEyVHlTRW54WWZncFozanNsNXN1aFJIbEZiRjUwQmEwa1VpS1ZmMTdjdExXS01vT054cFFJdGk5WTJjZ2VPVDBUNjU2RG1taGkvNDdVY3dQWnJKSGh3Y05yWGFCVDk3WHpkRS9tb0VuTlNZc2xQSVplMkZrWGxmTzdBOUpsNjN5WVd1RythS0VvQ3Q5QlpJdjlkYU5hTU1DdTd0UXFWK0xKdXhIUE85YU9mVlFyZGlub1o5Ykh3UG5Va3MvdmVoclF2dHN3anhoZUpmS2kydHZBRnpLbnY1Zy8rYnNqQlVLei9EUEdtc0tmeXQwYWtRT3lhSTlTTWtNai9Wa2hIRjJWRi9qakViYTlqZ0d3S00va0x4TkVOaHo3emQydmFNaUVabHFIcFhDUkxMWStJOGNPU0doOXhGcVFTVEs2RUhEcXA1MEJTR28vanRZa3E5TGNXaU1yZlptRGR3MTNaakdYNUU1RDJTQ1dnRWluSVI1OFBaRzJhOFJ3eFFuQ05xWEtCS1Rua0ZzVHQ3VkpOanFmSkRpaGttKzNpODJHZWRiVk1XMDV5Vi9VSjlESXpPY29JR2VTbEhRUzUwQ1dLR0F2WUNuZXJDd1Z2aExwV2JWQ0RnclVQbGZTdzRFUFIrNkRtbXlyYWFHYnBHeC9tenp5akVYU013T25yK3JVSEJVUmIwbFM3N2ZSZVNPaTNIdVFaaWhJMlAwNzFxS21DK2x6NUk2QjVvMmxpUmNRc29wMy9LZ3JvTzRVQzRtOHF5VlNXYVdEc05ZemlRZXU1K2JVZmkveHViNnlsUW1Gdk1aTjNxYkpmWng2Zy9rYmwzU3o5QnlMZjErR2FjNVR3T29FMHlJdjM0M1BUMGg4eFluQkdiMTJOa2dScmVOb3NGczRDdmdIQ29aTVA0bmdNam0rRG5BSzVDT2RydEdCWlk1VHo4d1VlaGxFWXh2UktRRFNYdkFkck9DUE5qWkIxRURPVU1wMFhYbGVYSCtNNGlUUml4T0RrVGkyTUJtR0JlbEo0RXRSSlhTRlRORndubEs3UjMwcWdHZ252NGNYZnV5NTluZkNhVkc2YmtoZEV4TENnSzdsOFZVbFJWMGpURVJhd2trMW5DUitxelNPdDZabHM2RW5DeWFTT2ZHRWNGMXVqbTB6RXFLQ2t1azBMeHRjSy9PMXJIMS80WHBwcWpmSzFlaTQzbzRDUHIvUWV1WDlOS21jakh2cVVTeC9tWHhhZnA4L1gxbHRuVTh4bWtySmF3N3RwWkF2aTQzcFdJd08zVmt2eUIyd0xOQzB3NmpBc3FFdTA0Q25zVVhGZHFrVHV3TG01eGZnQ3BQQTgwZVp0QXdRRkxCY2l6NWU3Ty9TQUV2cjVxTUUrak91dWhYd1h3c1grK1F6MzRQZDZ5Rm84RjdlQyt4akMzb1RmdTFlV0RtSkhnNHArUjNXOGkzRC94M0IrbEl1Tm1IWFFLNENGbDhsSEljL1dKcW9KM0l1UDZ5R2tzajhLNzNBY0QzYXl2NjVUd0VIbGFTL2g0MHdZcWhOTk1TOHVSMVFleEk2WVJkQ213eTk5bENBWlNXNnVqK1VYOCtCOFBwTWRIZkVUSjIwOWNqR1BWRjZKK0FOTGNnRENsN2NXVFhOaWE4UTB3UFdicUVRbjhwcEdTZVh2SU1majl4dHdQQTNDWnZHc3F1U2ZBekhvL2ZsQ2wzdC9ZTDVzUnN0NldpOHBOOEdoUEIxQ2UxYkVpSkRKbjZvbHZhNXdwaUtxbXcwNG5zZlYrN3hYUkw5U1J6UXZmQTc2dEVlTUNMUStUMVpJZzRncDdhc0cya3Nta2JjNklneEhOQy9VcmhFalFoMnBtbXFFTUx3c1lUb1NpMTZqL1dCN05TK2dvMUM2M3RkOFV4SHpkNCs5djVGaGNkRDhzVEFwWER5TW5wZjBHMmRoZDhNMWpuNVJqMVRGeDBPVUlMSVJoRzFlWUphd1hTRXUxbnVIMTlLUkw1SFBJTzVDSnh3VzRycFpFOEpOdkUzWFd3NTVaVmU0NkcwbSsyb1BNR0xJb01HUkpvREpRT2MzZW1WeVJreGJYb0lDNFFEeUlqVWRjSjRmNXdKeWJKRDJKTlpxTkNxV2hUdG5KZkpmRThTREdEbnZSMzRIZ2p4YlQvUXcxVGExRmVMMlFWelIxY1pmeDBIcGlCSGdTZkxycldkQjZxQkw4bkJkVDluR2hjdzhTQklTSW16RytOdHFMUnBGYjROOEUzS3Juak84VENqV1dGeENjaWJCZDViSkMwWnVSaGtMZUI5c3Jpck1jUzEyN2V2V3NMUmRGcTVDcldKejZHWVRKSVR2eFlWazhRVHlVaGV2dmx6eVlaZlR6SUgrOXpRNXRPVTgxSm9MZk4wRlczT1Q5aVFPWDlBTjVhTEtTRHlua25PdDgxRnV1Yy8xcFRoOUt0U1RlZ2xKeHJRWkNudW1rY2tPZUw1SHJVWkViYm5nUFJrU09STXZoY3NuMG5IdWd6anU2R0lNSFhrRndyNk5sN2FQQ3hrZDZFck1zVHpXUUN4QUpVMGdYU0pCVWp6ek1EOEMycnlhbEhRcTluNnFmUnROOFNEUTJVTFRIWUlhTjNCTXJtNjFPdXBQbkFXY3lwZkhidmZPRHFkdXlYc2hWME00cll1RHpuZERyb0Y4QU0vZHZKUFdWRUJDSlhKZG96c3g5U2oySEcyemdHdEE2ay9pbUxqWVpuRFNSMGMySSszVitMMlZDNjFIbXYvVjNONUZWYnZSK1UwNHZxVTdFRHV1b0Zzd2E5ZGg3NGFsQTl3b3lFWFNSZzNPdFJzT2RERkZzSmZMdVlybXBibzM1RjVuL1Y4SGViSkxWUVB0clY2bnRSdlQ5MW8rbTcxV3VtWDM0M285bHVCQ3FiVHhVRTlZeU9DR1NtMDVFdS9oTnNqcVJqMkpDOTJTRkd4NjZSZFBGMlhxZE93Z2NOUEtKcENrMm9sd2FSTjVwNHVwZ3VRYmRJaHFiTkNXZy9BSExsN3d2UmN6ZU5JMy9uSTBUei9CZTZtZjhFQmZLKzdEWEtmWHBmSURYVk9yQ1VtK0o2N2Q2S3owanlKOTI4VVVZYmE2TFNCZmRhUHhPUUcreEVrWHJKL25vRnNNTGYrZUhMM1dVNkRESUh1a1Z0Tnd6YXlsT0o3WVdpb1A5YXlsUEdqZzdhQ2oxTlMwRXV5ZGQ2ZnZ6MFd3eWwvSUM4L2J4TmZybFV6V2svdEhGOU9NVEpaQlBvK0NuOWg4Z01RY0JuU2xQMVhrOTNjaGN4Q3AvTDNLUWdYWFZDQ1pyT2FwN2xvNjIyRFBPNUgvY0dkekVGendsVnZJRG1zeC9MRUVsTzFFUGdLcDc3NjNaUzlUbnVYRzFyYW90VVlKS3VacWIzT3IzaENzU2RXMWVpN0FWcUQ3Rk9SRkxtVDgwUUVCK2huWURtRnJmbDVWMjVPalhTNVRXOWU5by8yd2N0YVlaenN6d3h0Y29NRm1hTStSTXFLUDBseWEwazA5eHJZa0dheVh5cjJTdWZsUkdiWW8ybzJ1MTdhckM1MTkyQzRaWDhEejhEbk9kS0VHYTBtdTAyTkVEM0M2RTExWUJnV1hDZUxnOWlEd3ErbTE1WjlkeUFRUytUY2RES2JmL0tqQW5WMjVUb1FSNmdxdHNVTFk1SXU3M0ZsRUxUZ3JSYmVnbFRVRHVZdFlqNGlPZnYzdGh1WFJrWTdUVVlyMkhwS01CZG1lQlUrR1dxaGwvYTE0RjF2Y3hJb2I4S3pWNld4Y2lwS0QvdU0rd2pFeVdGVytVcHNiMm9NR0dheG04OFRyQmxrc2pXQzNQSldmRmZTbEpiS2ZLOGlyQi9KOUh4YTRsUXFiTkhZT2JHaG5SYTBpYnNzbi9RZ3loM3VDTXdtTzBYSEdzT292N21YMnU3TVd3U2xkSk9LZ0cwdXFOd2F1ODZTeXpaaCtETGtkdGNUc09SMFNIRk9rdVlEUFEwS1pMbmNxYXFGNlluUHN6M3FsWjd1UUJReTZIcGNMaklveW14dStTTDRvcnFuWmMrQzFoRlF1VlZJTmFtQk01QnJJZmZxYlRXOUgxa0dhaDJDR0RYT3Y1dUsxdG5tQS8vL1dsQi9tVXRVamtUK1BwQ0w0Tldhb0Jiam9CYmVYdFJuQVI3dHEvbFRJWWEybHVvQnIwWDlyTWlUb0hXVm94Z2JhaEFpOVJGMDdRYjZvK2hzOU1EcnlXR3ZSREhmUGRZYTBISTduL1RUdWZZY1N3MnBaSTFVbVY0TFV2U2R4RUJPa212b0c1WE1lSE9yaGk2Tyt3cGRoTCtSQmR6ekJwWm9DUUE3ekJOaUV3dXAvUTBmcVM0bjZYWDFEU1duRVhnM2hlZzJIUXVvSGN3ZUYxa2I1eTNHUDA1RW4vZWJYSzNrb2ZCKyt1ZU5nTXdldCt3VS9VSHZtdVdOSEhCcDBwUmMwYi9ZQ051RDNFWkJ6OEVXYUczRGlGdG9uckVCN2YzbjBsUSszYjdQTmp6WWhiRzNWOEFuQ2NRcFZIVUhNOTM1RHQ1YWdMc2NDOWdXZW9obTBsZnd1UlI1Y1VJVFRzWFpBMmljcVVXaU9zUCsybFlhcDUwQytKODY1VTljbmNOMEt5T1g0dmE1Q290QzFtZTdhdWdMeWdEcGNpaDRxOHlvdk0wbG5SRzd3TkcvQkNSRnM3bGc3Y2ZFeFRudjNvTEV5WE5NOGs5MzBSUnY1M3V0Q3E3RGRJZDd0em94VW5COUkvYWdNMnBxWW4rMThlb29MTlhCcUdOMUhmT0Y2OFlYT1l6bU82VzI5cW5zZ3E5eHZMOVc4S0Q2L01tbHRGN0FqbGFCVFFjcTVpc2ludk5RUlIwSE12dGJzaXpVbndXV0NxS3Z3SlJwSlZvRmdxWXV0Z2tNa1hCZktGMElpRDlWYWlhMTJLVG9MR3FrZXdUVzJFWktIYnFMazhtTmhjeWVzMEorYytwczFPM2ZnV3ZyaUg0TGpCVGphcEZhS0owTklpakRQOEp4U2x6NGttbmwrbm9iNzdEM3djRklaZEgzaHhJcVFsS3lsTXRtczk5VG5tdzlMY3JNbU1nWFVtallXV29ZL3o2YWhGemhBbXFDNThRWERGeEs2alhoUWZ5amJaV2l2c1puTFJiMHNsYzhhYVp4b3dZUHNIcXdOR2MreHZ4QzBVdlArblBYc0NhRUZ4TEFlb3ZsRC9EVkdJaHB5T2ZlUXM1T1c2MGN4TE5ocXljV2Q2cm5ncm43RTd2NHpNcTlSdCszWEhoZGU1Z3haWFcxMzBBTWdYOVdYNkF2Qlh1cFpPaEYxTXFUNXF5eTlFMXVkcnRxdE42WDZkSGRtc0NXcXR5RDljMXlJSVpITE5FK2ZMd3Q4S1hwTUh0U1RyQll0S3NlbTEvRnJaNzR2eGUvTElXdVJIemUxdFB6S1lpUmtiY21hNkxzNG5vOXJEN0hhZVlZOFptMW5qUGU1TXdPZEJ6dk9tWkJTcHhKTUM5cWtvTjNsaTdNL1RhV1RDM2YxbnFFeEdWaHQwMGhvZmxaWElqL2J3b1BDbDI2MTAzcUVIKzZ1bUJ5c3RuazlDNGg1VUVlaFMwY0lkYlZGWEZucHRwN2FnNFVaMUp5Z2tNaS9JSHhYSEQvaXJxUGVOV0dxSU9HdCtlT01abTZrdEJmSWR4d0toZVM0ektVeThNT2d1WUpUOHRtTHBRdUtyYkZ3RXVSMStMLzdnYkRiYVZNOEc3QW0veGJjZDBKSDlXQU5uK1VQdVAvV3JKdE9DWnlKNGF0Q2lpODBhOWZwanZwYS9icHRxVU4rbGR1b0hrTUYxcThreHpocmNyaitBUmVwZ0hJbzM5ZEM4bDhwZi90ejFsUVo5SkxKbXJzNjJPSVg1Mm8rNWMwZytWd2tLb2N2eWlCcE9PMCtCUDhiU2VWaDYzdHVMTlFhSkpWL2Z2OVJVRmdZb3h4RTdnZXN4VlA1dUR1cklwRXpWRm5uaHpJMDJJcThHNVJVK3BVR1VpWUVGVmdxZkJ4SFN1V0hPRUlQWUxnVFQwWXZQQy9ueFREcVVxSE9NaFZ3S2pyejQwSWRIcHhhbjBHUHNocXdsTDhPdk5MQnJtZ3MxVm9FaWorYlpuNDRIUkJLaHp3QzBLekJlNVgvSytjTVRyVkhObHV3eFVxYURjUmN2WVk3MHZQZERRMTB0RGZuTWs2dTNGUjVlYUdRR0dVSncrdlNNeityWG1rZitpd0s3aUIzNTZtQkx5bEZrN09MNW5tYUMrWEw0WHFiMTZNcEpORnNOOUVDUUtxNjJTazBKZGp6M1czL2dTYUYwbFpxTkRGb21rQzBsc3JmNFZMTVRkRE94OHFFdTVRTkRkYjIvdzh5dFJtNXVtMEh2blJQQksxVklPSEw3Q1dlUlA3NkJFcHNvajI4TnlPdjZTK2d5bUdhRERxUktjMG5xMUdSZzZqTW44MnArUkpkVmRHeGVzSGJwN3JrcjFrKzBldHhYcXdndmpBU3o0U2hBQjhZWjBHcmpRckhvWFlRTW5tN3Z0UUM4S0pvRWFibm9LMFRYdHpldFVuc0s2Y1ZuUFBkemdRNVg0TUNXT0l5blQ1c3BnNkhTczdGUFNiY1ZtaTRJOUV5dFVvZmJVUWJBSXRwU0pWVnVQWXUxSEJIdTlBcTJsRE1iZkI2TmU1NTRuQ2JpMWtFcDc2bjhqWDhGN081RFJVNk1LckRDc3RjU0QzTTkzbzNQTURmSUQwblNaNkFzUGZqM1BkbzNtaHgrZTU0MFZ1N3E0WVBHaVByaklCc0RxYzdaWjA5dG43eTRQMm5hNGdjTmVpZFFSUEdqQ3pxd1lGTGtpb2lZbWpndU5pZzY0cEhSUFRFc0diQlJrUkVSRVJFUkVSRVJFUkVSRVJFUk13aWFKMmZTNHQ2Ukl3aE9FVThjN05oNkh1bDQ0WHE5RGFjNlUwUkN3eWNRY3lCYVJ2ZHZ3RHlMUjN0TjArR0MxeXFpSWdCUUtjODFreDBqeUd4ek1YRXZCdFNlWTlMRlJIUkoyekZrUTFkRnhrNituTWF1OVZhcTFxRHpCU09pT2lDenY3cXBwdmYxSjEwd0RVQ3lsT2VJaUlHQWlkTHhGb3BJaUlpSWlJaUlpSWlJaUlpSWlJaVltR2gxZm9GR094QXpkNjRLM2tBQUFBQVNVVk9SSzVDWUlJPR4HVmlzaWJsZWdkAgEPEGRkFgBkAgkPDxYCHwNoZBYCAgEPEGRkFgBkAgoPDxYCHwNoZBYCAgEPEGRkFgBkAgsPDxYCHwNoZGQCDg8PFgIeBFRleHQFE9in2LHYs9in2YQg2YXYrNiv2K9kZGSCLFIBuafIx1eLN1a9bNCiz3kAk1K20b/c+fZSsrfdrA==" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="7A1355CA" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAjXr3GXeAE1Yb+aVi2M/cFPVK7BrRAtEiqu9nGFEI+jByksCfHOPvsjidhvzpslt8YQ+v6o/Z8AOPDi9EsV23ckLWdeRYfXa67JvT3v8IX0T81qN26R/iK6Hzpoe2PqCIfuZRe0ZozZr3CSWUFM8nGDilWQV4BkPxlEdFKEhhhXTYEUAMv9kihJvuj3V0H5k13WLn4DYP0DMV4ZaXZluVW2" />
+			<input name="txtUsername" type="text" id="txtUsername" style="display:none;" />
+			<input name="txtAuthenticationString" type="text" id="txtAuthenticationString" style="display:none;" />
+			<input name="txtComputerName" type="text" id="txtComputerName" style="display:none;" />
+			<input name="txtImageValidation" type="text" id="txtImageValidation" style="display:none;" />
+			<input name="txtRandomString" type="text" id="txtRandomString" style="display:none;" />
+			<input name="txtSignature" type="text" id="txtSignature" style="display:none;" />
+			<input type="submit" name="cmdLogin" value="" id="cmdLogin" style="display:none;" />
+			<div id="SoftwaresInfo" style="direction:rtl; display:none; background-color:white; background-image:url(./images/userLogin/didgahSoftwaresInfoBackgroundRTL.png); background-repeat: no-repeat; background-position-y: bottom; background-position-x: left;">
+				<span style="background-color:#6e8dcc; width:100%; height:100px; color:white; text-align:center; font-weight:bold; padding-top:40px;">
+					در سازمان شما از مجموعه راهکارهای جامع دیدگاه، نرم‌افزارهای زیر استفاده می‌شوند
+				</span>
+				<div id="LicenseSoftwaresInfo"><ul style='line-height:1.5'><li style='list-style-type:circle; font-size:30px; color:#6e8dcc;'><a href=https://www.chargoon.com/office-automation target=_blank style='color:#6e8dcc; text-decoration:none; font-size:8pt;'>راهکار اتوماسیون اداری</a></li><br><a href=https://www.chargoon.com/didgah/office/document-manager target=_blank style='color:gray; text-decoration:none; font-size:8pt;'>نرم‌افزار مكاتبات</a></ul></div>
+				<span style="height:30px; width:100%; text-align:left; padding-left:20; color:#6e8dcc;">
+					نسخه: R400A209-P4000415
+				</span>
+			</div>
+			<div id="pnlEnterprise">
+	
+				<table style="width:100%; height:expression(document.body.offsetHeight); direction:rtl;" cellpadding="0" cellspacing="0">
+					<tr>
+						<td style="text-align:center; vertical-align:middle;">
+							<div style="background-image:url(./images/userLogin/enterprise/Didgah/fa/back.jpg); background-repeat:no-repeat; width:805; height:606;">
+								<table width="100%">
+									<tr height="190px">
+										<td colspan="3" valign="top" style="padding-right:35px">
+											<table style="float:left; margin-top:30px; margin-left:30px;">
+												<tr>
+													<td style="height:120px; text-align:left; vertical-align:middle;">
+														<img src="data:image/png;base64,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" id="imgOrganizationLogoEnterprise" />
+													</td>
+												</tr>
+											</table>
+											<span style="height:75px"></span>
+                      <span style="font-family:b nazanin,nazanin,tahoma; font-size:18pt; font-weight:bold;color:#43454A">دانشگاه ارومیه</span>
+											<div style="width:160px; height:25px; text-align:left;"><img style="margin-top:5px;" src="images/userLogin/softwaresInfoIcon.png" onclick="$('#SoftwaresInfo').modal({containerCss: {width: 500}});"></div>
+										</td>
+									</tr>
+									<tr>
+										<td id="tdFormSection" align="left" style="width:315px;">
+											<table id="tblLoginForm" style="margin-left:5px;">
+												<tr>
+													<td class="titleCell">کد کاربر</td>
+													<td><input type="text" id="txtClientUsername" name="txtClientUsername" class="input" maxlength="64" size="20" onchange="checkUserName();" onkeypress="if (event.keyCode==13) { if (document.getElementById('cboAuthenticationTypeEnterprise') != null && cboAuthenticationTypeEnterprise.value == 'Token' && !tokenLogin()) return; return(validateSubmit()); }" dir="ltr" autocomplete="off"></td>
+												</tr>
+												<tr>
+													<td class="titleCell">رمز</td>
+													<td><input type="password"  id="txtClientPassword" name="txtClientPassword" class="input" dir="ltr" maxlength="64" size="20" autocomplete="off" onkeypress="capLock(event); if (event.keyCode==13) { if (document.getElementById('cboAuthenticationTypeEnterprise') != null && cboAuthenticationTypeEnterprise.value == 'Token' && !tokenLogin()) return; return(validateSubmit()); }" ></td>
+												</tr>
+
+												<tr>
+													<td></td>
+													<td><div id="divCapsLock" style="visibility:hidden;color: red;font-size: xx-small">کلید Caps Lock فعال است</div></td>
+												</tr>
+												<tr>
+													<td colspan="2" align="left"><input id="cmdClientLogin" type="button" class="button" value="ورود" onclick="if (document.getElementById('cboAuthenticationTypeEnterprise') != null && cboAuthenticationTypeEnterprise.value == 'Token' && !tokenLogin()) return; return(validateSubmit());" style="float:left" /><div style="margin:3 0 0; padding-left:73;"><img id="imgToken" src="./images/userLogin/token.png" style="display:none;" /></div></td>
+												</tr>
+												
+												<tr><td height="30px">&nbsp;</td></tr>
+											</table>
+
+
+										</td>
+										<td style="width:55px;"></td>
+										<td valign="top">
+											<div style="width:390px; height:350px; overflow:auto;">
+												<span class="tipOfTheDay ck-content" style="font:9pt; display:block; text-align:justify; width:100%;"></span>
+											</div>
+										</td>
+									</tr>
+									<tr dir="ltr">
+										
+											<td style="text-align:right; padding-right:30px">
+												<a href="https://www.chargoon.com/%D8%AF%DB%8C%D8%AF%DA%AF%D8%A7%D9%87-%D8%AF%D8%B1-%D8%A8%D8%B3%D8%AA%D8%B1-%D9%87%D9%85%D8%B1%D8%A7%D9%87/" target="_blank"><img style="border-style:none" src="images/userLogin/enterprise/Didgah/fa/didgahMobile.png" /></a>
+											</td>
+											<td colspan="3" style="padding-left:58px; font-family:Calibri;">
+												<a href="http://www.chargoon.com/" target="_blank">www.chargoon.com</a><br />
+												Copyright © Chargoon Co. All rights reserved.
+											</td>
+										
+									</tr>
+								</table>
+							</div>
+						</td>
+					</tr>
+				</table>
+			
+</div>
+			
+			
+			
+>
+		</form>
+
+		<script type="text/javascript" for="window" event="onload">
+			// tip of the day transform start
+
+			function replaceInvalidHtml(str) {
+				var invalidTags = ["figcaption"];
+				var transformableTags = ["figure"];
+				var tagRegex;
+				var validStr = str;
+				for(var i=0; i < transformableTags.length; i++) {
+					validStr = validStr.replace(new RegExp(transformableTags[i], "g"), "div");
+					break;
+				}
+			
+				for(var i=0; i < invalidTags.length; i++) {
+					tagRegex = new RegExp("<" + invalidTags[i] + ".*?>" + ".*" + "</" + invalidTags[i] + ">");
+					validStr = validStr.replace(tagRegex, '');
+				}
+			
+				return validStr;
+			}
+			
+			var tipsContent = $(".tipOfTheDay");
+			for(var i=0; i < tipsContent.length; i++) {
+				tipsContent[i].innerHTML = replaceInvalidHtml("<h5 style=\"text-align:center;\" dir = \"auto\"><span style=\"color: rgb(102,102,102);background-color: rgb(255,255,255);font-family: Yekan;\">حضرت زهرا سلام الله علیها فرمودند:</span></h5>\n<p style=\"text-align:center;\" dir = \"auto\"><span style=\"color: rgb(102,102,102);background-color: rgb(255,255,255);font-size: 14px;font-family: Yekan;\">خیارکم الینکم مناکبة و اکرمهم لنسائهم؛</span></p>\n<p style=\"text-align:center;\" dir = \"auto\"><span style=\"color: rgb(102,102,102);background-color: rgb(255,255,255);font-size: 14px;font-family: Yekan;\">بهترین شما کسی است که در برخورد با مردم نرم تر و مهربان تر باشد و ارزشمندترین مردم کسانی هستند که با همسرانشان مهربان و بخشنده اند.</span><span style=\"font-size: 14px;\"> <br></span></p>\n");
+			}
+
+			// tip of the day transform end
+
+		$("#txtClientUsername")[0].value = $("#txtUsername")[0].value;
+		if ($("#txtClientUsername")[0].value != "")
+			checkUserName();
+
+		try {
+			var oNetwork = new ActiveXObject("WScript.Network");
+			$("#txtComputerName")[0].value = oNetwork.ComputerName;
+		} catch(e) {}
+
+		if ($("#txtClientUsername")[0].value != "")
+			setFocus($("#txtClientPassword")[0]);
+		else
+			setFocus($("#txtClientUsername")[0]);
+
+		$("#cmdClientLogin")[0].disabled = $("#cmdLogin")[0].disabled;
+		</script>
+	</body>
+</html>
