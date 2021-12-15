@@ -38,9 +38,14 @@ func main() {
 
 	baseDomain = findBase(*homepage)
 
+	err := os.Mkdir(baseDomain, 0755)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	visited[*homepage] = true
 
-	err := processHome(*homepage)
+	err = processHome(*homepage)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -133,7 +138,10 @@ func save(body io.ReadCloser, url string) error {
 		filename = url[8:]
 	}
 
-	file, err := os.Create("./pages/" + filename + ".html")
+	fields := strings.Split(filename, "/")
+	filename = strings.Join(fields, "-")
+
+	file, err := os.Create(baseDomain + "/" + filename + ".html")
 	if err != nil {
 		return err
 	}
