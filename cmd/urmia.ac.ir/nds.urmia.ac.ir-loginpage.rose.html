@@ -1,0 +1,700 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    var _csrf_token_headers =  {'X-CSRF-TOKEN' : 'df69c9ee-6e3a-4c0f-aa64-8826c2027d15'};
+    function addUniqueParam(jForm) {
+        jForm.action = jForm.action;
+    }
+
+</script>
+
+
+
+
+<head>
+    <!--[if lte IE 6]>
+    <meta http-equiv="REFRESH" content="0;url=/note/ie6_error.html">
+    <![ENDIF]-->
+    
+        <title>سماد(سامانه مدیریت امور دانشجویی)</title>
+        
+        <link rel="apple-touch-icon" sizes="180x180" href="/styles/newui/favicon_v0.16/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/styles/newui/favicon_v0.16/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/styles/newui/favicon_v0.16/favicon-16x16.png">
+    
+    <meta name="heading" content="سماد- سامانه مدیریت امور دانشجویی"/>
+    <!--<meta name="menu" content="Login"/>-->
+    
+    
+    
+        <meta name="menu" content="AnonymousMenu"/>
+    
+    <link rel="stylesheet" type="text/css" media="all"
+          href="/styles/farsi-fuse/theme.css">
+    <link rel="stylesheet" href="/styles/newui/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/newui/newui.css">
+    <link rel="stylesheet" href="/styles/newui/newui-master.css">
+    <link rel="stylesheet" href="/styles/newui/newui-login.css">
+    <link rel="stylesheet" href="/styles/newui/fonts.css">
+
+    <!-- JavaScripts Required by DWR -->
+    <script type="text/javascript">var context_path = "";</script>
+    <script type="text/javascript" src="/scripts/dwr/dwr-service.js"></script>
+    <script type='text/javascript' src='/scripts/dwr/engine.js'></script>
+    <script type='text/javascript' src='/scripts/dwr/util.js'></script>
+    <link href='/styles/KeyBoardStyle.css' rel="stylesheet" type="text/css">
+    <script src='/scripts/keyboard.js' type="text/javascript"></script>
+    <script type="text/javascript">
+        function click_loading() {
+            document.getElementById("loading").style.display = "block";
+        }
+
+        function show_loading(show) {
+            if (show) {
+                document.getElementById("loading").style.display = "block";
+            } else {
+                document.getElementById("loading").style.display = "none";
+            }
+        }
+
+        /*function refreshCaptcha() {
+            document.getElementById("captcha_img").src = "/captcha.jpg?" + makeid();
+        }
+
+        function makeid() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < 8; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            return text;
+        }
+
+        function doCaptcha(res) {
+            document.forms["loginForm"].submit();
+        }*/
+
+        function displayCreatorSiteWindows() {
+            var stNo = DWRUtil.getValue('studentNumberInput');
+            window.open('http://www.dadekavan.ir' + stNo, "mywindow", "menubar=1,resizable=1,width=2048,height=750");
+        }
+
+        function displayOrganSiteWindows() {
+            var stNo = DWRUtil.getValue('studentNumberInput');
+            window.open('http://www.urmia.ac.ir' + stNo, "mywindow", "menubar=1,resizable=1,width=2048,height=750");
+        }
+
+        function load_cas_server_login_page() {
+            window.location.href = 'casUrl?service=casReturnUrl';
+        }
+    </script>
+</head>
+
+
+
+
+
+        <script type="text/javascript" src="/struts/js/base/jquery-2.2.4.min.js"></script>
+        <script type="text/javascript" src="/struts/js/base/jquery-ui.min.js?s2j=4.0.2"></script>
+            <script type="text/javascript"
+                    src="/struts/i18n/datepicker-fa.min.js?s2j=4.0.2"></script>
+<script type="text/javascript" src="/struts/js/plugins/jquery.form.min.js?s2j=4.0.2"></script>
+<script type="text/javascript" src="/struts/js/plugins/jquery.subscribe.min.js?s2j=4.0.2"></script>
+
+<script type="text/javascript" src="/struts/js/struts2/jquery.struts2.min.js?s2j=4.0.2"></script>
+
+<script type="text/javascript">
+    $(function () {
+        jQuery.struts2_jquery.version = "4.0.2";
+        jQuery.struts2_jquery.loadAtOnce = true;
+        jQuery.scriptPath = "/struts/";
+        jQuery.struts2_jquery.local = "fa";
+        jQuery.struts2_jquery.gridLocal = "fa";
+        jQuery.struts2_jquery.timeLocal = "fa";
+        jQuery.struts2_jquery.datatablesLocal = "fa";
+        jQuery.ajaxSettings.traditional = true;
+
+        jQuery.ajaxSetup({
+            cache: false
+        });
+
+        jQuery.struts2_jquery.require("js/struts2/jquery.ui.struts2.min.js?s2j=4.0.2");
+
+    });
+</script>
+
+    <link id="jquery_theme_link" rel="stylesheet"
+          href="/struts/themes/smoothness/jquery-ui.css?s2j=4.0.2" type="text/css"/>
+
+<body id="login" style="background:url('/images/sky2.jpg') no-repeat fixed !important">
+<div style="width: 100%;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+<div id="loading" class="loading_div">
+    <img alt="Loading ..." class="loading_icon" align="absmiddle" src="/images/ajax-loader-big.gif"/>
+</div>
+<div style="top:0px; left:0px; right:0px; bottom:0; background:transparent !important; margin:0; position: absolute;">
+    
+    
+
+    <div align="center" style="background:transparent !important">
+        
+        
+        
+        
+        <div style="margin-top:4%;">
+            <div>
+                <div id="viewHelpDialog"
+>
+
+                    <div align="center">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <img src="/images/ajax-loader.gif"/>
+                    </div>
+                </div>
+<script type='text/javascript'>
+jQuery(document).ready(function () { 
+	var options_viewHelpDialog = {};
+	options_viewHelpDialog.height = 300;
+	options_viewHelpDialog.width = 400;
+	options_viewHelpDialog.title = "\u0628\u0627\u0632\u06CC\u0627\u0628\u06CC \u06A9\u0644\u0645\u0647 \u0639\u0628\u0648\u0631";
+	options_viewHelpDialog.show = "slide";
+	options_viewHelpDialog.hide = "slide";
+	options_viewHelpDialog.autoOpen = false;
+	options_viewHelpDialog.modal = true;
+	options_viewHelpDialog.opentopics = "openRemoteDialog1s";
+	options_viewHelpDialog.jqueryaction = "dialog";
+	options_viewHelpDialog.id = "viewHelpDialog";
+	options_viewHelpDialog.href = "#";
+
+jQuery.struts2_jquery_ui.bind(jQuery('#viewHelpDialog'),options_viewHelpDialog);
+
+ });  
+</script>
+
+
+                
+
+            </div>
+            <table align="center"
+                   class="login-container"
+                   border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td valign="top">
+                        <h3 class="text-center mt-2" style="color: #333333;">ورود به سامانه سماد</h3>
+                    </td>
+                </tr>
+                <tr>
+                    
+                    <td valign="top" id="where-am-i">
+                        <form action="/j_security_check" style="display: flex" method="post"
+                              name="loginForm"
+                              id="loginForm">
+                            
+                            <img style="display: table-cell;margin:29px 10px; line-height:26px; float:right;"
+                                 class="ui-icon-home"
+                                 alt="/res?creatorLogoId=&dl=false"
+                                 src='/styles/newui/images/logo.png' alt='داده کاوان اندیشه برتر'
+                                 height='100'
+                                 width='100'/>
+                            <input type="hidden" name="_csrf"
+                                   value="df69c9ee-6e3a-4c0f-aa64-8826c2027d15"/>
+                            <table border="0"
+                                   style="width: 375px;text-align:right; background:none; padding: 20px 12px;"
+                                   cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="left" valign="top" style="width:
+                                    245px;
+                                    ">
+                                        
+                                            <table style="text-align:right; width: 100%" border="0" cellspacing="0"
+                                                   cellpadding="0">
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div class="form-group">
+                                                            <label for="username"
+                                                                   class="required form-label">نام کاربری</label>
+                                                            <input class="form-input" type="text" dir="ltr"
+                                                                   name="username" tabindex="1" id="username">
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div class="form-group">
+                                                            <label for="password"
+                                                                   class="required form-label">رمز عبور</label>
+                                                            <input class="form-input" type="password" dir="ltr"
+                                                                   name="password" tabindex="2" id="password">
+                                                                
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                    
+                                                
+                                                    
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td valign="top">
+                                                        
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">
+                                        <table style="width: 100%">
+                                            <tr>
+                                                <td class="text-center">
+                                                    
+                                                        <input type="submit" class="btn-success btn-login"
+                                                               style="width: 100%;font-size: 17px;"
+                                                               onClick="click_loading()"
+                                                               name="login"
+                                                               value="ورود"
+                                                               tabindex="4" id="login_btn_submit"/>
+                                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </td>
+                </tr>
+                
+            </table>
+        </div>
+        
+        
+            <div class="login_message">
+                <div align="center" class="login-messages">
+                    <ul>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11610&dl=false" alt="" width="60" height="60" /><p>بسم الله الرحمن الرحیم</p> 
+<p>به دلیل آمار پایین رزرو غذا در روزهای پنج شنبه از مورخه 20/8/1400 رزرو و توزیع غذا طی روزهای پنج شنبه صورت نخواهد پذیرفت.</p> 
+<p>با تشکراداره تغذیه</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>دانشجویان محترم تحصیلات تکمیلی متقاضی خوابگاه ترم مهر 1400جهت دریافت معرفی نامه خوابگاه، اخذ تاییدیه استاد راهنمای محترم و ارسال آن از طریق روسای محترم دانشکده ها به معاون محترم فرهنگی و دانشجویی ضروری می باشد.</p> 
+<p>یادآور می گردد تا این تاریخ، برای دانشجویان مقطع کارشناسی امکان و اجازه سکونت در خوابگاههای ملکی وجود ندارد.</p> 
+<p><strong>حوزه معاونت فرهنگی و دانشجویی </strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11610&dl=false" alt="" width="60" height="60" /><p>بسم الله الرحمن الرحیم</p> 
+<p>به اطلاع دانشجویان عزیز می رساند</p> 
+<p>بر اساس تصویب صندوق رفاه دانشجویی در تاریخ1400/05/09</p> 
+<p>قیمت جدید غذاها به شرح ذیل می باشد</p> 
+<p>صبحانه16000 ریال ،غذای کم هزینه21000 ریال ،غذای متوسط هزینه 30000 ریال ، غذای پر هزینه35000 ریال و غذای دانشجویان سنوات گذشته و دانشجویان خارجی و...صبحانه45000ناهار و&nbsp; شام90000 ریال می باشد</p> 
+<p>اداره تغذیه دانشگاه ارومیه</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>بر اساس مصوبه هیئت رئیسه محترم دانشگاه، به اطلاع کلیه دانشجویان میرساند: </strong></p> 
+<p>بعلت وضعیت قرمز کرونایی و ضرورت رعایت دستورالعمل های بهداشتی، تا اطلاع ثانوی هیچ دانشجوی جدیدی در خوابگاههای دانشجویی دانشگاه ارومیه پذیرش و اسکان داده نخواهد شد.</p> 
+<p>دانشجویان ساکن خوابگاههای دانشجویی نیز در صورت تردد به شهرستان (حتی به مدت یک شبانه روز) اجازه بازگشت و سکونت مجدد را نخواهند داشت.</p> 
+<p><strong>مدیریت امور دانشجویی</strong></p> 
+<p><strong>اداره امور خوابگاهها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه ترم تابستان</strong></p> 
+<p>به اطلاع کلیه دانشجویان محترم ساکن خوابگاههای دانشجویی می رساند که برای تمدید سکونت در ترم تابستان ارائه نامه استاد راهنما (برای دانشجویانی که مهلت نامه قبلی آنها اتمام یافته و یا شامل تابستان نمی باشد) و اخذ معرفی نامه خوابگاه از اداره امور خوابگاهها ضروری می باشد.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره امور خوابگاهها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>به اطلاع دانشجویان محترم ساکن در خوابگاه ها می رساند: &nbsp;تاریخ اعتبار معرفی نامه ایشان از 15 تیر ماه تا 31 تیرماه سال جاری، از طرف اداره امور خوابگاه ها، تمدید شده و نیاز به مراجعه حضوری دانشجویان جهت تمدید ، نمی باشد.</p> 
+<p>حوزه معاونت دانشجویی</p> 
+<p>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>به اطلاع دانشجویان ساکن خوابگاه های دانشجویی می رساند با توجه به محدودیت های ناشی از بیماری کرونا، ساعت بسته شدن در خوابگاه های <strong>پسران 10 شب و دختران 8 شب&nbsp;</strong> می باشد.</p> 
+<p>&nbsp;</p> 
+<p>حوزه معاونت فرهنگی و دانشجویی</p> 
+<p>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p>ا<strong>طلاعیه اداره امور خوابگاه ها</strong></p> 
+<p>با توجه به صدور مجوز از ستاد کرونای استان مبنی بر بازگشایی خوابگاه های دانشجویی برای دانشجویان تحصیلات تکمیلی با رعایت دستورالعمل های بهداشتی، به اطلاع کلیه دانشجویان متقاضی خوابگاه می رساند: خوابگاه های ملکی این دانشگاه از روز شنبه مورخ 1400/2/18 برای سکونت دانشجویان با شرایط ذیل دایر خواهد بود:</p> 
+<p>1-ارائه درخواست جدید استاد راهنما یا مدیر گروه (تایید فرم حضور دانشجو در دانشگاه) از طریق کارتابل ریاست محترم دانشکده به حوزه معاونت فرهنگی و دانشجویی برای همه دانشجویان ضروری می باشد.</p> 
+<p>2-حضور دانشجو در درمانگاه دانشگاه و اخذ گواهی مورد تایید پزشک مربوط</p> 
+<p>3-دانشجویان با در دست داشتن مدارک فوق در وقت اداری به اداره امور خوابگاه ها مراجعه و نامه معرفی به خوابگاه اخذ نمایند.</p> 
+<p><strong>حوزه معاونت فرهنگی و دانشجویی</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>با توجه به تدام وضعیت قرمز کرونایی، به اطلاع دانشجویان عزیز می رساند تمامی خوابگاه های دانشجویی دانشگاه ارومیه در هفته آینده (<strong>28 فرودین&nbsp; الی&nbsp; &nbsp; 3&nbsp;اردیبهشت&nbsp;ماه</strong>) همچنان تعطیل خواهد بود.</p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p><strong>به اطلاع دانشجویان محترم تحصیلات تکمیلی متقاضی خوابگاه در نیمسال دوم سال تحصیلی 1399-1400 می رساند: بر اساس قوانین و مقررات صندوق رفاه دانشجویان،فقط دانشجویان سنوات مجاز( دکتری تخصصی از از ترم یک تا آخر ترم نه و کارشناسی ارشد از ترم یک تا آخر ترم پنج) با ارائه مدارک ذیل ،امکان سکونت در خوابگاه های ملکی دانشگاه را دارند.</strong></p> 
+<p><strong>1- فرم تاییدیه استاد راهنما که از طریق رییس دانشکده به معاون دانشجویی ارسال و به اداره امور خوابگاه ها ارجاع می گردد.</strong></p> 
+<p><strong>2- ارایه جواب آزمایش </strong><strong>PCR</strong><strong> منفی به روز</strong></p> 
+<p><strong>3- اخذ معرفی نامه از اداره امور خوابگاه ها</strong></p> 
+<p>&nbsp;</p> 
+<p><strong>معاونت دانشجویی</strong></p> 
+<p><strong>اداره امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>به اطلاع دانشجویان ساکن خوابگاه های دانشجویی در ترم جاری می رساند: با توجه به سکونت کوتاه مدت تعدادی از دانشجویان در خوابگاه ها و ضرورت تحویل اتاق به متقاضیان دیگر، خواهشمند است بعد از اتمام مهلت معرفی نامه قانونی، کلیه وسایل شخصی را برداشته و اتاق را تحویل سرپرست نمایند. یادآور می گردد &nbsp;در صورت عدم رعایت ، این اداره مسئولیتی در قبال وسایل شخصی دانشجویان نخواهد داشت و وسایل باقی مانده به انبار انتقال خواهد یافت.</p> 
+<p><strong>معاونت دانشجویی</strong></p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>پیرو اطلاعیه قبلی به اطلاع دانشجویانی که در ترم دوم سال تحصیلی 98-99 اجاره بهای خوابگاه را واریز کرده اند می رساند و تاکید می شود که برای عودت اضافه پرداختی اجاره بها ، <strong>فقط شماره حساب&nbsp;13 رقمی&nbsp; بانک ملی</strong> را از طریق سامانه اعلام شده ارسال نمایند. در غیر اینصورت امکان عملیات بانکی جهت عودت مبلغ فوق الذکر میسر نمی باشد و شماره کارت اعلام شده توسط برخی از دانشجویان مورد قبول و ترتیب اثر نیست.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p>اطلاعیه</p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان ساکن خوابگاه های <strong>خودگردان و استیجاری که در ترم 982</strong> اجاره بهای خوابگاه را از طریق سامانه امور خوابگاه واریز کرده اند می رساند : جهت عودت اضافه پرداختی اجاره بهای خوابگاه ، <strong>شماره حساب بانک ملی به نام خود دانشجو</strong> را در سامانه امور خوابگاه ها در قسمت <strong>عملیات دانشجو – ارسال پیشنهادات / انتقادات</strong> در قالب زیر ارسال نمایند:</p> 
+<p><strong>عنوان : شماره حساب </strong></p> 
+<p><strong>نوع : اداری</strong></p> 
+<p><strong>شرح موضوع : شماره حساب بانک ملی به نام دانشجو</strong></p> 
+<p>&nbsp;</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان ساکن خوابگاهای ملکی دانشگاه می رساند ، به هنگام ترک خوابگاه&nbsp; به مقصد شهر محل اقامت خود و قبل از عزیمت به مقصد خوابگاه ،خواهشمند است آخرین اطلاعیه های مربوط به خوابگاه را مطالعه و بر اساس شرایط مندرج درآنها جهت رفت و برگشت، برنامه ریزی و اقدام نمایند.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>&nbsp;بدینوسیله به اطلاع می رساند:</p> 
+<p>- جهت رعایت شیوه نامه های&nbsp; بهداشتی، دانشجویان محترم ساکن خوابگاههای ملکی دانشگاه نباید به شهرهای دیگر تردد داشته باشند. در صورت خروج از خوابگاه و مسافرت، تا پایان شرایط کرونایی اجازه بازگشت به خوابگاه نخواهند داشت.</p> 
+<p>- خوابگاه های ملکی دانشگاه از پذیرش دانشجویان جدید تحصیلات تکمیلی معذور می باشند.</p> 
+<p>&nbsp;<strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>به اطلاع کلیه دانشجویان ساکن خوابگاه ها میرساند، با توجه به شیوع گسترده ویروس کرونا حداکثر تا <strong>روز جمعه مورخ&nbsp; 99/8/30</strong> فرصت دارند خوابگاه خود را تخلیه نمایند.</p> 
+<p>&nbsp;</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong><br /> &nbsp;</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>به اطلاع کلیه دانشجویان متقاضی خوابگاه در <strong>همه مقاطع تحصیلی (دکتری – کارشناسی ارشد – کارشناسی) جدیدالورود (1400-1399) </strong>که در اطلاعیه های ثبت نام درخواست خوابگاه داده بودند می رساند، با توجه به شیوع گسترده ویروس کرونا و برگزاری همه کلاسهای دانشگاه بصورت مجازی ، <strong>فعلا امکان واگذاری خوابگاه به هیچ دانشجویی (دکتری – کارشناسی ارشد – کارشناسی) وجود ندارد.&nbsp;</strong></p> 
+<p>بدیهی است در صورت اتخاذ تصمیمهای جدید مبنی بر واگذاری خوابگاه، اطلاع رسانی خواهد شد.</p> 
+<p>&nbsp;</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp; اطلاعیه دانشجویان کارشناسی</strong><strong> جدیدالورود </strong></p> 
+<p>پذیرفته شدگان مقطع کارشناسی ورودی جدید که متقاضی استفاده از خوابگاه دانشجویی می باشند،در ثبت نام اینترنتی و مرحله فرم اطلاعات تکمیلی ، باید <strong>گزینه متقاضی خوابگاه هستم </strong>را انتخاب نمایند تا برنامه ریزی لازم برای شرایط غیر کرونایی و در زمان مقرر برای تخصیص خوابگاه به این عزیزان انجام گردد . بدیهی است در حال حاضر(ترم جاری) بعلت شیوع بیماری کرونا به هیچکدام از دانشجویان مقطع کارشناسی ، خوابگاه واگذار نمی گردد.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه دانشجویان کارشناسی ارشد جدیدالورود </strong></p> 
+<p>پذیرفته شدگان مقطع کارشناسی ارشد ورودی جدید که متقاضی استفاده از خوابگاه دانشجویی می باشند،در ثبت نام اینترنتی و مرحله فرم اطلاعات تکمیلی ، باید <strong>گزینه متقاضی خوابگاه هستم </strong>را انتخاب نمایند تا برنامه ریزی لازم برای شرایط غیر کرونایی و در زمان مقرر برای تخصیص خوابگاه به این عزیزان انجام گردد . بدیهی است در حال حاضر(ترم جاری) بعلت شیوع بیماری کرونا به هیچکدام از دانشجویان مقطع کارشناسی ارشد ، خوابگاه واگذار نمی گردد.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه دانشجویان دکتری جدیدالورود</strong></p> 
+<p>جهت دریافت اطلاعیه لطفا به آدرس زیر مراجعه فرمایید:</p> 
+<p><a href="http://amuzeshi.urmia.ac.ir/sites/amuzeshi.urmia.ac.ir/files/%D8%A7%D8%B7%D9%84%D8%A7%D8%B9%D9%8A%D9%87%20%D8%AB%D8%A8%D8%AA%20%D9%86%D8%A7%D9%85%20%D8%AF%D9%83%D8%AA%D8%B1%D9%8A99_1.pdf" rel="nofollow">لینک اطلاعیه</a></p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره کل امور دانشجویان</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>الف) به اطلاع دانشجویان تحصیلات تکمیلی دارای سنوات رفاهی مجاز(به غیر از دانشجویان دکتری تخصصی ورودی نیمسال تحصیلی &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;982-981-972) می رساند: جهت دریافت معرفی نامه اسکان در خوابگاه، انجام موارد ذیل لازم می باشد.</p> 
+<p>اخذ گواهی سلامت پزشکی به تاریخ روز مراجعه به اداره امور خوابگاه ها، &nbsp;از مراکز بهداشتی و درمانی</p> 
+<p>تکمیل فرم حضور دانشجو در دانشگاه توسط دانشجو سپس استاد راهنما و ارسال آن از طریق سیستم اتوماسیون مکاتبات به امور دانشجویان – اداره امور خوابگاه ها. (فرم مذکور در اختیار دانشکده ها و اساتید محترم و همچنین در سایت دانشگاه ارومیه –معاونت دانشجویی-اداره امورخوابگاه ها، موجود می باشد)</p> 
+<p>پس از تکمیل مدارک فوق و ارایه آن به ادره امور خوابگاه ها ، دانشجویان می توانند معرفی نامه سکونت در خوابگاه را از کارشناس مربوط، دریافت نمایند.</p> 
+<p>ب) به اطلاع دانشجویان محترم دکتری تخصصی ورودی نیمسال تحصیلی 982-981-972 می رساند: از تاریخ 1/7/99 می توانند جهت انجام پیش ثبت نام و انتخاب خوابگاه، به برنامه اتوماسیون داخلی اداره امور خوابگاه ها مراجعه نموده و پس از تایید، می توانند کاردکس اسکان خود را دریافت نموده و به پیوست گواهی سلامت ، به خوابگاه مورد انتخاب خویش مراجعه نمایند.</p> 
+<p>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه خوابگاه ویژه داوطلبان مصاحبه دکترا دانشگاه ارومیه</strong></p> 
+<p>بدینوسیله به اطلاع داوطلبان دکتری تخصصی دانشگاه ارومیه&nbsp; که برای مصاحبه نیاز به سکونت دارند می رساند ،سراها یا خوابگاه های ذیل با شرایط مندرج آماده پذیرایی می باشند:</p> 
+<p>&nbsp;</p> 
+<p>خوابگاه آوا :‌ واقع در سه راه دخانیات برای دانشجویان یا داوطلبان دختر و متاهل (خانواده)</p> 
+<p>خوابگاه محدثه: واقع دربلوار شهید رجایی - رو به روی تامین اجتماعی شماره 2 برای پسران&nbsp;</p> 
+<p>شماره تماس جهت هماهنگی: 09144390586 حمیدی</p> 
+<p>&nbsp;</p> 
+<p><strong>اداره کل امور دانشجویان دانشگاه ارومیه</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>به اطلاع دانشجویان محترم می رساند ،بر اساس برنامه صندوق رفاه دانشجویان ،<strong>بنام بودن شماره تلفن همراه دانشجو</strong> جهت انجام تسویه حساب دانشجویی ضروری می باشد. در غیر اینصورت ادامه روند تسویه حساب دانشجویی در سامانه ذیربط مقدور نخواهد بود . لطفا قبل از تشریف آوردن برای تسویه حساب ،به این امر توجه فرمایید.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>اطلاعیه شماره 3 اداره امور خوابگاه ها</strong><br /> به اطلاع دانشجویان محترم ساکن در خوابگاه های دانشجویی خودگردان وابسته به دانشگاه ارومیه در استان آذربایجان غربی میرساند با پیشنهاد و تلاشهای همه جانبه حوزه معاونت دانشجویی دانشگاه و حمایت و همکاری خوابگاه داران محترم، اجاره بهای کلیه دانشجویان در این خوابگاه ها ، در ترم جاری (بهمن 98-99) بخشیده شد. لازم به ذکر میباشد برای مبالغ واریز شده در ابتدای این ترم توسط دانشجویان تصمیم گیری لازم، اتخاذ و متعاقبا اطلاع رسانی خواهد شد.<br /> <strong>حوزه معاونت دانشجویی<br /> اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>به اطلاع کلیه دانشجویان محترم خوابگاهی دانشگاه ارومیه در تمامی مقاطع تحصیلی میرساند :</strong></p> 
+<p>با توجه به ضرورت تعیین تکلیف خوابگاه های دولتی و غیر دولتی و پیش رو بودن تعطیلات تابستان و ضرورت آماده سازی خوابگاه ها برای سال تحصیلی آینده، ضروری است دانشجویان محترم جهت برداشتن وسایل شخصی و تخلیه اتاق و خوابگاه ، با رعایت پرتکلهای بهداشتی و صرفا در ساعات (8 الی 18) به غیراز روز های جمعه با در نظر گرفتن ملاحظات ذیل به خوابگاه مراجعه نمایند.</p> 
+<p>1-دانشجویان عزیز لطفا تا حد امکان تمام وسایل خود را به همراه خود ببرند و اگر وسایلی را که امکان بردن برایشان میسر نیست پس از بسته بندی به انبار های مشخص شده در خوابگاه تحویل نمایند.</p> 
+<p>2-دانشجویانی که به علت بعد مسافت و یا به هر دلیل دیگر امکان مراجعه ندارند، می توانند نماینده ای از هم اتاقی ، هم خوابگاهی ، همکلاسی و یا دوستان دانشجوی بومی ارومیه را جهت جمع آوری وسایل ، انتقال و یا تحویل آن به انبار با ارائه کارت دانشجویی به خوابگاه مربوطه معرفی نمایند.</p> 
+<p>3-مهلت برداشتن وسایل از مورخه 99/3/27 به مدت یک هفته تمدید و تا مورخه 99/4/4 امکان پذیر می باشد.</p> 
+<p>4-در خصوص وضعیت اجاره بهای خوابگاه های دانشجویی تصمیمات لازم بر اساس قانون و مقررات صندوق رفاه اتخاذ و متعاقبا اعلام خواهد شد.</p> 
+<p>5-به علت احتمال افزایش تعداد دانشجویان متقاضی سکونت موقت در خوابگاه و شیوع بیماری کرونا ، امکان سکونت موقت به هیچ عنوان مقدور نمی باشد.</p> 
+<p>6-دانشجویان تحصیلات تکمیلی که تا پایان ترم جاری به دلیل فعالیت های آموزشی ، پژوهشی و غیره در دانشگاه حضور خواهند داشت می توانند تا 15 تیر ماه نسبت به تخلیه خوابگاه و اتاق خود اقدام نمایند.</p> 
+<p>7-چنانچه دانشجویان محترم به هر دلیلی در این زمینه اقدام ننمایند، دانشگاه و مالکین خوابگاه ها به ناچار اقدام به جمع آوری وسایل دانشجویان نموده و مسئولیتی را در این خصوص نخواهند پذیرفت.</p> 
+<p>&nbsp; <strong>حوزه معاونت دانشجویی&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong><strong>&nbsp; </strong></p> 
+<p><strong>&nbsp; اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>ضمن آرزوی سلامتی برای دانشجویان عزیز؛</strong></p> 
+<p>با توجه &nbsp;به شرایط&nbsp; پیش آمده و خروج اضطراری دانشجویان از خوابگاه ها وبرگزاری امتحانات به صورت مجازی، به اطلاع دانشجویان خوابگاه های ملکی، استیجاری و خودگردان در همه مقاطع تحصیلی می رساند؛ جهت تخلیه، برداشتن وسایل و تحویل خوابگاه و اتاق از تاریخ 99/3/17 لغایت 99/3/27 در ساعات اداری (15- 8) اقدام نمایند . بدیهی است پس از اتمام مهلت مقرر، دانشگاه مسئولیتی در قبال وسایل باقیمانده نخواهد داشت. در مورد بقیه موارد مرتبط با خوابگاه ها، تصمیم گیری های لازم اتخاذ و متعاقبا اطلاع رسانی خواهد شد.</p> 
+<p>نکته: سکونت در خوابگاه های دانشجویی در ترم جاری فقط برای دانشجویان تحصیلات تکمیلی با تایید مسئولین دانشکده و استاد راهنمای مربوط مبنی بر ضرورت حضور دانشجو بر اساس اطلاعیه معاونت آموزشی و رعایت دقیق دستورالعمل های بهداشتی ، مقدور خواهد بود.</p> 
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</strong>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11612&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>به اطلاع کلیه دانشجویان محترم خوابگاه های ملکی (دولتی) ،استیجاری و خود گردان دانشگاه ارومیه می رساند با توجه به درخواست برخی از دانشجویان برای برداشتن وسایل شخصی (فقط ضروری) از خوابگاه های دانشجویی ،این امکان به غیر از روز های تعطیل (پنجشنبه و جمعه )از مورخ 99/2/13 لغایت 99/2/31 در وقت اداری ( 8 الی 15:30 )با هماهنگی قبلی با سرپرستان خوابگاهها و یا مالکین خوابگاها (خودگردان ) برای دانشجویان فراهم شده است.</strong></p> 
+<p><strong>یادآوری1: موکداً از دانشجویان عزیز انتظار دارد با توجه به ضرورت رعایت دستورالعمل های ستاد مقابله با کرونا،&nbsp; از هرگونه اقدام و مراجعه غیرضروری ، خودداری فرمایند.</strong></p> 
+<p><strong>یادآوری2: این امکان فقط برای خود دانشجو و با ارائه کارت دانشجویی مقدور بوده و از پاسخگویی به غیر دانشجو معذور خواهیم بود.</strong></p> 
+<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; حوزه معاونت دانشجویی</strong></p> 
+<p><strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;اداره امور خوابگاها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان کارشناسی سال اول ساکن خوابگاه های خودگردان ( سراهای غیر دولتی )می رساند: جابجایی و انتقال به خوابگاه های دولتی(ملکی)در ترم دوم سال تحصیلی به هیچ وجه مقدور نمی باشد و لذا دانشجویان در این خصوص به اداره امور خوابگاه ها مراجعه ننمایند.</p> 
+<p><strong>اداره امور خوابگاه ها </strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>به اطلاع دانشجویان متقاضی خوابگاه وردی بهمن ماه سال تحصیلی 98-99 می رساند: جهت اخذ خوابگاه بعد از انتخاب واحد (19 الی 26 بهمن) با در دست داشتن کارت دانشجویی به اداره امور خوابگاه ها در وقت اداری مراجعه نمایند.</p> 
+<p><strong>ادره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>به اطلاع کلیه دانشجویان ساکن خوابگاه میرساند: کلیه خوابگاه های دانشجویی اعم از ملکی (دولتی), استیجاری و خودگردان برای دو ترم به دانشجویان واگذار شده است و خوابگاه ها بین دو ترم تعطیل نمی باشد.</p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان سنوات گذشته ساکن خوابگاه<strong> ( ترم 9 دکتری تخصصی- ترم 5 کارشناسی ارشد – ترم 9 کارشناسی )</strong> می رساند ، با توجه به محدود بودن ظرفیت خوابگاه ها ،در ترم بعد (982) امکان سکونت برای آنها نخواهد بود و می بایست تا مورخ <strong>98/11/15</strong> نسبت به تخلیه خوابگاه اقدام نمایند. در صورت داشتن واحد درسی و نیاز به خوابگاه ، از 16 بهمن ماه جهت سکونت در خوابگاه های خودگردان به اداره امور خوابگاه ها مراجعه نمایند.</p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p>ا<strong>طلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان خوابگاهی می رساند، <strong>آوردن مهمان بدون هماهنگی و بدون اخذ مجوز &nbsp;از اداره امور خوابگاه ها</strong> ممنوع می باشد .در صورت عدم رعایت موضوع از طرف دانشجویان، طبق مقررات با میزبان و مهمان رفتار خواهد شد.</p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان <strong>کارشناسی ارشد پسر ورودی 98(ترم اول )</strong> می رساند فیش واریزی اجاره بهای خوابگاه از امروز (98/06/30 ) تا مورخه 98/7/3 فعال خواهد شد و امکان واریز فراهم می شود.</p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه اداره امور خوابگاه ها برای دانشجویان جدید الورود کارشناسی ارشد برای اخذ خوابگاه:</strong></p> 
+<p>پذیرفته شدگانی که متقاضی استفاده از خوابگاه می باشند باید هنگام ثبت نام اینترنتی گزینه (متقاضی خوابگاه هستم) را انتخاب نمایند و با شرایط ذیل نسبت به سکونت اقدام نمایند:</p> 
+<p>1.پذیرفته شدگانی که گزینه(متقاضی خوابگاه هستم) را انتخاب نمایند <strong>به مدت یک سالتحصیلی(دو ترم) اجاره بهای خوابگاه برای ایشان ثبت خواهد شد</strong>، لذا خواهشمند است در صورت عدم تمایل به سکونت در خوابگاه (به هر دلیلی از جمله: انصراف، انتقال، مهمان و...) <strong>تا</strong> <strong>مورخه 98/7/15</strong> جهت حذف بدهی ثبت شده الزاما بصورت حضوری به اداره امور خوابگاهها مراجعه نمایند. در غیر اینصورت هزینه دو ترم خوابگاه ثبت و اخذ خواهد شد و اداره امور خوابگاهها با توجه به &nbsp;اطلاع رسانی انجام شده از بابت بدهی ثبت شده، هیچ گونه مسئولیتی نخواهد داشت.</p> 
+<p>2.پذیرفته شدگانی که متقاضی استفاده از خوابگاه دانشجویی می باشند، بایستی <strong>از تاریخ</strong><strong> 98/6/26 </strong><strong>به بعد و قبل از مراجعه حضوری به دانشگاه</strong> با ورود به سامانه امور خوابگاه ها (از طریق صفحه اصلی دانشگاه ارومیه) نسبت به مشاهده خوابگاه اختصاص داده شده و پرداخت اینترنتی هزینه سکونت در خوابگاه اقدام نموده و با <strong>تهیه نسخه چاپی از کاردکس اسکان (همان معرفی نامه خوابگاه</strong><strong>(</strong> <strong>و تاییدیه پرداخت اجاره بهای</strong> <strong>خوابگاه</strong> جهت سکونت به محل خوابگاه مراجعه فرمایند.</p> 
+<p><strong>تذکر1:</strong> در هیچ کدام از مراحل ثبت تقاضا برای استفاده از خوابگاه و یا اطلاع از خوابگاه تخصیص داده شده، نیازی به مراجعه حضوری به اداره امور خوابگاه ها نمی باشد.</p> 
+<p><strong>تذکر2:</strong> آدرس خوابگاه تخصیص داده شده در کاردکس اسکان موجود است.</p> 
+<p><a href="http://amuzeshi.urmia.ac.ir/sites/amuzeshi.urmia.ac.ir/files/KhabgahHelp.pdf" rel="nofollow"><strong>راهنمای استفاده از سامانه امور خوابگاه ها</strong></a></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>اطلاعیه خوابگاه های خودگردان دانشگاه ارومیه</strong></p> 
+<p>خوابگاه های خودگردان تحت نظارت دانشگاه ارومیه به تعداد 12 دستگاه (6 خوابگاه پسرانه و 6 خوابگاه دخترانه ) برای دانشجویان متقاضی خوابگاه آماده پذیرش می باشد.اجاره بهای خوابگاه ها به ازای هر نفر در هر ترم در سال تحصیلی 98-99 مبلغ 7.000.000 ریال می باشد.</p> 
+<p><strong>حوزه معاونت دانشجویی</strong></p> 
+<p><strong>اداره امور خوابگاه ها</strong></p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>&nbsp;اطلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان ساکن خوابگاه های سال تحصیلی 98-99 می رساند کلیه خوابگاه های ملکی(دولتی)،استیجاری و خودگردان(غیردولتی) یک روز زودتر از شروع ترم (98/6/22) دایر بوده و آماده پذیرش دانشجویان مقاطع مختلف (دکتری ، کارشناسی ارشد ، کارشناسی) ورودی های جدید و سال بالایی می باشند.</p> 
+<p>حوزه معاونت دانشجویی</p> 
+<p>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p><strong>اطلاعیه خوابگاهی &nbsp;برای دانشجویان سنوات گذشته متقاضی خوابگاه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان سنوات گذشته متقاضی خوابگاه مقطع کارشناسی ارشد و دکتری تخصصی می رساند، بر اساس مقررات صندوق رفاه دانشجویان ونظر مساعد معاون محترم دانشجویی ، دانشگاه ارومیه برای دانشجویان ترم &nbsp;5 کارشناسی ارشد و ترم 9 دکتری تخصصی یک ترم در موقع شروع سال تحصیلی جدید خوابگاه &nbsp;ملکی واگذار می کند .</p> 
+<p>تذکر 1- لازم به توضیح است که دانشجویان کارشناسی سنوات گذشته بعلت کمبود خوابگاه ملکی در خوابگاههای خودگردان ثبت نام اینترنتی نمایند.</p> 
+<p>تذکر 2- برای دانشجویان دکتری تخصصی بالاتر از ترم 9 و کارشناسی ارشد بالاتر از ترم 5 امکان واگذاری خوابگاه ملکی وجود ندارد در صورت نیاز در خوابگاههای خودگردان ثبت نام اینترنتی نمایند.</p> 
+<p>حوزه معاونت دانشجویی</p> 
+<p>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                            <li style="margin:40px;padding: 10px 40px 10px 5px; list-style: none;">
+                                <img style="float: right;" src="/res?id=11605&dl=false" alt="" width="60" height="60" /><p><strong>اطلاعیه</strong></p> 
+<p>بدینوسیله به اطلاع کلیه دانشجویان خوابگاهی می رساند بر اساس قوانین و مقررات صندوق رفاه دانشجویان برای اخذ خوابگاه و سکونت در آن در سال تحصیلی 98-99 ، واریز اجاره بهای خوابگاه ، در اول ترم ضروری می باشد.</p> 
+<p>&nbsp;حوزه معاونت دانشجویی</p> 
+<p>اداره امور خوابگاه ها</p>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        
+        <div id="copyright-dab" class="d-flex justify-content-between align-items-center"
+             style="width: 100%; background-color:rgba(242,242,242, 0.6) !important;color: #ffffff; position: fixed;bottom: 0;">
+
+            <div class="dab-copyright2">
+                <a style="display: table" onclick="displayCreatorSiteWindows()" href="">
+                    
+                    <span style="display: table-cell; vertical-align: middle;">داده کاوان اندیشه برتر</span>
+                </a>
+            </div>
+
+            <div class="dab-copyright3">
+                <a style="display: table" onclick="displayOrganSiteWindows()" href="">
+                    <span style="display: table-cell; vertical-align: middle;">دانشگاه ملی ارومیه</span>
+                    
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="androidModal" tabindex="-1" role="dialog" aria-labelledby="androidModal">
+    <div class="modal-dialog" style="width: 100%" role="document">
+        <div class="modal-content">
+            <div class="modal-body" style="font-size: 52px; padding-bottom: 50px">
+                <div>سلام. اپلیکیشن موبایل سماد منتشر شد!</div>
+                <div>پیشنهاد می‌کنیم این برنامه را در گوشی خود دانلود و نصب کنید تا از این پس، دسترسی راحت‌تر و سریع‌تری به خدمات دانشجویی داشته باشید.</div>
+            </div>
+            <div class="modal-footer" style="padding-bottom: 100px;">
+                <div>
+                    <button type="button" style="font-size: 52px;padding: 20px 40px; with: 400px" id="btn-mobile-google"
+                            class="btn btn-primary">دریافت از گوگل پلی</button>
+                    <div style="font-size:72px; height:72px" >  </div>
+                    <button type="button" style="font-size: 52px;padding: 20px 40px; with: 500px" id="btn-mobile-ok"
+                            class="btn btn-primary">دانلود اپلیکیشن</button>
+                    <button type="button" style="font-size: 32px;margin-right: 100px;" class="btn btn-default"
+                            data-dismiss="modal">فعلاً نه</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/styles/newui/bootstrap.min.js"></script>
+<script type="text/javascript">
+    var mobileModal = 0;
+    if (mobileModal === 1) {
+        $(document).ready(function () {
+            var ua = navigator.userAgent.toLowerCase();
+            var isAndroid = ua.indexOf("android") > -1;
+            if (isAndroid) {
+                $('#androidModal').modal();
+                $('#btn-mobile-ok').click(function (e) {
+                    e.preventDefault();
+                    window.location = '/softwares/app/samad.apk';
+                });
+                $('#btn-mobile-google').click(function(e) {
+                    e.preventDefault();
+                    window.location = 'https://play.google.com/store/apps/details?id=com.samad';
+                })
+            }
+        })
+    }
+</script>
+
+</body>

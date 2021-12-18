@@ -24,16 +24,13 @@ var (
 	lock    sync.Mutex
 
 	baseDomain string
-
-	pageNum int
-	maxPage *int
 )
 
 func main() {
 	homepage := flag.String("url", "", "URL of the homepage.")
 	useProcess := flag.Bool("a", false, "If the concurrency must be done using multi processing instead of multi threading.")
 	serial := flag.Bool("s", false, "If the crawling must be done in non-concurrent fashion.")
-	maxPage = flag.Int("n", 100, "Max number of pages to save.")
+	maxPage := flag.Int("n", 100, "Max number of pages to save.")
 	maxWorkers := flag.Int("p", 50, "Max number of concurrent execution units.")
 	flag.Parse()
 
@@ -76,10 +73,10 @@ func main() {
 	default:
 		fmt.Println("--multi threaded processing--")
 
-		wp := workerpool.New(*maxWorkers, process)
+		wp := workerpool.New(*maxWorkers, *maxPage, process)
 		go wp.Run()
 
-		for len(stack) != 0 || pageNum < *maxPage {
+		for wp.PageNum < wp.MaxPages {
 			link := stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 			wp.AddTask(link)
@@ -163,10 +160,6 @@ func save(body io.ReadCloser, url string) error {
 	if err != nil {
 		return err
 	}
-
-	lock.Lock()
-	pageNum++
-	lock.Unlock()
 
 	return nil
 }

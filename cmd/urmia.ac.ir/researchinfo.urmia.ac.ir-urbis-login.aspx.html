@@ -1,0 +1,210 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1"><meta http-equiv="X-UA-Compatible" content="IE=Edge" /><title>
+	سیستم اطلاعات پژوهشی دانشگاه ارومیه
+</title><link rel="stylesheet" href="Content/CSS/main.css" /><link rel="stylesheet" href="Content/CSS/dist.css" /><link rel="stylesheet" href="Content/Font-Awesome/css/font-awesome.css" type="text/css" />
+
+     <script src="Content/JS/jqueryNNP.min.js" type="text/javascript"></script>
+    <script src="../javascript/_common.js" type="text/javascript"></script>
+        <style>
+           
+            @media (max-width: 500px) {
+                .no-margin-xs {
+                    margin: 0px !important;
+                }
+
+                .h1 {
+                    font-size: 20px !important;
+                    padding-top: 25px !important;
+                }
+            }
+
+            .rounded {
+                border-radius: 6px;
+            }
+        </style>
+<script type="text/javascript">
+    dFeatures = 'dialogHeight: 450px; dialogWidth: 1049px; dialogTop: 646px; dialogLeft: 4px; edge: Raised; center: Yes; help: Yes; resizable: Yes; status: Yes;'//default features
+    modalWin = "";
+    function xShowModalDialog(sURL, vArguments, sFeatures) {
+        if (sURL == null || sURL == '') {
+            alert("Invalid URL input.");
+            return false;
+        }
+        if (vArguments == null || vArguments == '') {
+            vArguments = ''
+        }
+        if (sFeatures == null || sFeatures == '') {
+            sFeatures = dFeatures;
+        }
+
+        sFeatures = sFeatures.replace(/ /gi, '');
+        aFeatures = sFeatures.split(";");
+        sWinFeat = "directories=0,menubar=0,titlebar=0,toolbar=0,";
+        for (x in aFeatures) {
+            aTmp = aFeatures[x].split(":");
+            sKey = aTmp[0].toLowerCase();
+            sVal = aTmp[1];
+            switch (sKey) {
+                case "dialogheight":
+                    sWinFeat += "height=" + sVal + ",";
+                    pHeight = sVal;
+                    break;
+                case "dialogwidth":
+                    sWinFeat += "width=" + sVal + ",";
+                    pWidth = sVal;
+                    break;
+                case "dialogtop":
+                    sWinFeat += "screenY=" + sVal + ",";
+                    break;
+                case "dialogleft":
+                    sWinFeat += "screenX=" + sVal + ",";
+                    break;
+                case "resizable":
+                    sWinFeat += "resizable=" + sVal + ",";
+                    break;
+                case "status":
+                    sWinFeat += "status=" + sVal + ",";
+                    break;
+                case "center":
+                    if (sVal.toLowerCase() == "yes") {
+                        sWinFeat += "screenY=" + ((screen.availHeight - pHeight) / 2) + ",";
+                        sWinFeat += "screenX=" + ((screen.availWidth - pWidth) / 2) + ",";
+                    }
+                    break;
+            }
+        }
+        modalWin = window.open(String(sURL), "", sWinFeat);
+        if (vArguments != null && vArguments != '') {
+            modalWin.dialogArguments = vArguments;
+        }
+    }
+
+    function checkFocus() {
+        if (window.navigator.appVersion.indexOf("MSIE") == -1) {
+            if (modalWin != null && !modalWin.closed) {
+                self.blur();
+                modalWin.focus();
+            }
+        }
+        else {
+            if (modalWin != null && !modalWin.closed) {
+                modalWin.focus();
+            }
+        }
+    }
+
+    function windowclose(res) {
+        alert(res);
+    }
+
+    function SetMyHomePage(cid) {
+        var control = cid;
+        control.style.behavior = 'url(#default#homepage)';
+        control.setHomePage(document.URL);
+    }
+    function switchToSSL() {
+        if (location.protocol.toLowerCase() == 'http:')
+            location.href = location.href.replace('http:', 'https:');
+    }
+
+    function GetDomainName() {
+        var url = window.location.href;
+        var url_parts = url.split('/');
+        var domain_name_parts = url_parts[3].split(':');
+        var domain_name = domain_name_parts[0];
+        return domain_name;
+    }
+
+</script>
+</head>
+<body style="overflow:hidden">
+    <form name="form1" method="post" action="./login.aspx" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTg0OTY1MTQxN2Rkkpsf22ODst0QDeDqqFiJ6OVKzwZhm20L/4D028xj2RY=" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="4A5FB600" />
+        <div>
+            <div id="LoginTable" class=" container-fluid no-padding" style="background-image:url(Images/URMLogin.jpg);background-repeat:no-repeat;background-size:cover;height:89%;">
+                <div class=" header" style="background-color: rgba(247, 247, 247, 0.7); height: 85px">
+                    <img src="Images/Urmia_Universitywt.png" id="HeadImg" class="col-md-2 pull-right" style="height: 110px; width:110px; padding: 10px" />
+                    <div id="title" class="col-md-6 h1 FontB no-margin-xs" style="margin-top: 25px; color: rgb(87, 87, 87); font-weight: bold">دانشگاه ارومیه</div>
+                    <div class="padding padding-r-5 pull-left h3 FontB  hidden-xs" style="line-height: 40px; margin-top: 25px; color: #7a0b7a; font-weight: bold; background-color: #D4D4D6; font-size: 20px; border-top-right-radius: 4px; border-bottom-right-radius: 4px;">
+                        
+                    </div>
+
+                </div>
+                <div class=" col-md-3 col-sm-6 col-xs-12 pull-right rounded text-center no-margin-xs" style="background-color: RGBA(255, 255, 255, 0.9); margin: 20px; padding-left: 25px; padding-right: 25px; padding-bottom: 10px">
+
+                    <div class=" FontB h4">سیستم اطلاعات پژوهشی پیشرو  </div>
+                    <div id="tblLogin" class=" col-md-12 col-xs-12 no-margin text-center rounded " style="padding: 10px; border-style: dashed; border-width: thin;">
+
+                        <div class=" col-md-12 no-margin text-center rounded text-white" style="background-color: #555; height: 30px; padding-top: 5px">
+                            ورود به سیستم
+                        </div>
+                         
+                        <input name="txtUserName" type="text" id="txtUserName" maxlength="25" class=" col-md-12 col-xs-12 rounded inline" placeholder="نام کاربری" tabindex="1" style="background-color: RGBA(245, 245, 245, 0.9); margin-top: 5px; border-style: solid" />
+                        <!-- disables autocomplete -->
+                        <input type="password" style="display: none">
+                        <span id="RequiredFieldValidator1" title="*" style="color: Red; display: none;">*</span>
+                         
+                        <input name="txtPassword" type="password" id="txtPassword" maxlength="25" class="col-xs-12 col-md-12 rounded inline" placeholder="کلمه عبور" validationgroup="Login" tabindex="1" style="background-color: RGBA(245, 245, 245, 0.9); margin-top: 5px; border-style: solid" autocomplete="off" />
+                        
+                         <span id="Literal2" class="errorlbl"></span>
+                        
+                        
+
+                        <span id="Span1" title="*" style="color: Red; display: none;">*</span>
+                        
+
+
+                        <input onclick="if (typeof(Page_ClientValidate) == 'function') Page_ClientValidate(''); " name="btnLogin" type="submit" id="btnLogin" class="btn col-md-4 col-sm-6  col-xs-5 FontB bg-green margin-b-5" style="margin-top: 5px" tabindex="5" value="ورود" />
+
+                        <img src="Images/lock.gif" onclick="switchToSSL();" style="cursor: hand;display:none;" />
+                        
+                      
+<a href="ResetGrish.aspx" id="reset" type="text/html" class="btn col-md-12 col-xs-12  col-sm-6 FontB bg-red" style="margin-top: 5px">برای بازیابی کلمه عبور کلیک کنید</a>
+
+
+
+                    <br>
+
+                    
+                    </div>
+
+                    
+                   
+                </div>
+            </div>
+            <div class=" footer text-center" style="background-color: #555; height: 80px;">
+            <div class=" form-group nomargin " style="padding-top: 12px; padding-bottom: 18px; font-size: 18px">
+                <label class=" form-inline FontB text-white ">
+                    <strong>
+                        </strong>
+                    <span id="Label2"></span>
+                </label>
+                <div class="col-md-1 no-padding pull-left">
+                    <a href="http://www.narmnegaran.com/" title="نرم نگاران پیشرو" target="_blank">
+                        <img src="images/pishroobs.png" id="Img2" class="img-responsive" alt="Image"></a>
+                </div>
+            </div>
+
+        </div>
+        </div>
+        
+      
+    <img style="display:none" src='images/english.gif' id='IMGLang' />
+    
+    <script type="text/javascript">
+
+        //document.form1.txtUserName.focus();
+        document.getElementById('txtUserName').focus();
+        if (window.parent != null && window.parent.location != window.location) {
+            window.parent.location = window.location;
+        }
+
+
+    </script>
+    </form>
+</body>
+</html>

@@ -1,0 +1,250 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head><title>
+
+</title>
+   
+
+    <style type="text/css">
+    html, body 
+    {
+    direction : rtl;
+    text-align: center;
+    margin: 0px;
+    font-family: tahoma;
+    font-size: 12px;
+    height:100%;
+    width:100%;
+    padding: 0px;
+
+}
+    .LTR
+    {
+        direction:ltr;
+        text-align:right;
+    }
+    </style>
+    	<link REL="stylesheet" TYPE="text/css" href="../Calstyle.css" />
+
+
+    <style type="text/css">
+        .style2
+        {
+            width: 100px;
+        }
+        .style3
+        {
+            width:160px;
+            text-align:right;
+        }
+        .fildset
+        {
+            width:400px;
+
+        }
+        .auto-style1 
+        {
+            width: 100%;
+        }
+        .auto-style2 
+        {
+            width: 160px;
+        }
+        .auto-style3 
+        {
+            width:160px;
+            text-align: right;
+        }
+    </style>
+   
+  <script src='../JS/Registration.js' type="text/javascript"></script>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8 " /><link href="../App_Themes/default/css.css" type="text/css" rel="stylesheet" /><link href="/WebResource.axd?d=AfNPCD-zO4tC4avRml4pXMg_3Oh0he3BT1D_TpwxfV-TyunOcyfP_HjOKtSznzjrcEoPpmvb7OuD7CVP1Mu0uJQfZnKaJpB2ZPLYyeP5GhiegAbCyJxL8roKqnWazk6b0k282wn1jzgU66WONskzyQ2&amp;t=635065137360000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=FmXiYaI12MpTGPX9f2RRIVbGgtmjRLeXXMQQcVnAy7ys0nnPwzuyyk4IjuPcT8BH-8_DpLNRjL250oEnNfPxS1gjELrJkbOJXhvvUfUCg4XlBEIEffPwJ8bB6gO8gkAPM_uUnVCdZfAHMTvBAThMxwkn846p9ENQppfJ11fOWKoN6tzM1-DHjIo-sJ0BZvJa0&amp;t=635065137360000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=uprzG9v8PLOOFa6JvYwyp-a7hBjNw6UoL2GZ6frlBwYuLOvMsrcjt_RChZcR5B4oMqqB-uE6WiCge1ODgIdJFJKX-ybMVqlySV8KfczbQUD2FvkyTFrZlfWFcKMxIqhNfjBYkTa1Fv3bbYmNb6gbUQ2&amp;t=635065137360000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /><link href="/WebResource.axd?d=3Pg7SmInDlS0aFxOzcflGsthNqwnGKmsCoJJwa-woGoBFamSMvTpECjRJRPwGXCLzhYPtZnDZqkWf8yW50Yw0ZDMWh2pqSIjgRiJJ4XHl-qpi68-AU1TXd6tcbsdtCSDDMYBDFff0tmXcRurnzPQEk6rDnYLzxyzxanvIYVQP05w1hdsBXFk7IlBwshijU_J0&amp;t=635065137360000000" type="text/css" rel="stylesheet" class="Telerik_stylesheet" /></head>
+<body>
+  
+    <form name="aspnetForm" method="post" action="./Login.aspx" id="aspnetForm" style=" padding: 0px; height:100%; width:100%; margin: 0px;">
+<input type="hidden" name="ctl00_RadScriptManager1_TSM" id="ctl00_RadScriptManager1_TSM" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+
+<script src="/Telerik.Web.UI.WebResource.axd?_TSM_HiddenField_=ctl00_RadScriptManager1_TSM&amp;compress=1&amp;_TSM_CombinedScripts_=%3b%3bSystem.Web.Extensions%2c+Version%3d4.0.0.0%2c+Culture%3dneutral%2c+PublicKeyToken%3d31bf3856ad364e35%3aen-US%3af7ba41a4-e843-4f12-b442-8e407f37c316%3aea597d4b%3bTelerik.Web.UI%3aen-US%3a8a277cf4-155d-4ba9-b3c0-d6f62646e5f2%3a16e4e7cd%3af7645509%3a22a6274a%3aed16cbdc%3ab7778d6c%3a24ee1bba%3a7165f74" type="text/javascript"></script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CD85D8D2" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAaCPrNB1igX2ad+WvQthMurd6x3/pj9pwHCbCMqdPTBkHC2kq5PZ0TyLRSYIJM1esY3/c/rs9GIoVr1ALBPCrlaEetxVc5LlB+IQWXDi4ADJOiuWv399Dkef1ZUm9VSkJlh8ZUAlAqybYmVf8Btpyux2BiAVRsJlAQTTQtVMnXwGg==" />
+   &nbsp; 
+ 
+
+    
+  
+  <table style=" height:100%; width:100%; margin: 0px; ">
+  <tr>
+  <td style="vertical-align:top;" >
+    <div id="header">
+   <div id="info"></div>
+   <div id="logo">
+   <img id="ctl00_Image1" src="../Img/Logo.gif" border="0" />
+   <p><span id="ctl00_Label1"></span></p>
+    <p><span id="ctl00_Label2">بازنشستگی</span></p>
+   </div>
+  
+    
+    </div> <div id="navi"> 
+       </div>
+  </td>
+  </tr>
+  
+ 
+   
+       
+  
+    <tr>
+  <td  style="vertical-align:top;">
+    <div id="main" >
+    
+
+    
+
+    <!-- 2013.2.611.40 --><div id="ctl00_ContentPlaceHolder1_RadAjaxManager1SU">
+	<span id="ctl00_ContentPlaceHolder1_RadAjaxManager1" style="display:none;"></span>
+</div>
+    
+    <div id="divlogin">
+
+   
+        <table class="auto-style1">
+            <tr>
+                <td class="fildset">
+    <fieldset  title="LOGIN" class="fildset" style="padding:10px 10px 10px 10px; direction:rtl;">
+    <legend>ورود به سیستم</legend>
+    <table style=" padding-top :10px;"  >
+    <tr>
+    <td class="style2"><span id="ctl00_ContentPlaceHolder1_Label3">نام کاربری :</span></td>
+    <td class="auto-style3" ><span id="ctl00_ContentPlaceHolder1_RadTextBox1_wrapper" class="riSingle RadInput RadInput_Office2007"><input id="ctl00_ContentPlaceHolder1_RadTextBox1" name="ctl00$ContentPlaceHolder1$RadTextBox1" size="20" class="riTextBox riEnabled" type="text" value="" /><input id="ctl00_ContentPlaceHolder1_RadTextBox1_ClientState" name="ctl00_ContentPlaceHolder1_RadTextBox1_ClientState" type="hidden" /></span> 
+        </td>
+        <td class="style3">
+        
+        <img id="ctl00_ContentPlaceHolder1_Image2" src="../Img/USER.jpg" height="14" width="16" border="0" />
+        
+        
+            
+        </td>
+    </tr>
+    <tr>
+        
+         <td class="style2"><span id="ctl00_ContentPlaceHolder1_Label1">رمز عبور :</span></td>
+    <td class="auto-style3">
+        <span id="ctl00_ContentPlaceHolder1_RadTextBox2_wrapper" class="riSingle RadInput RadInput_Office2007"><input id="ctl00_ContentPlaceHolder1_RadTextBox2" name="ctl00$ContentPlaceHolder1$RadTextBox2" size="20" class="riTextBox riEnabled" type="password" /><input id="ctl00_ContentPlaceHolder1_RadTextBox2_ClientState" name="ctl00_ContentPlaceHolder1_RadTextBox2_ClientState" type="hidden" /></span>
+         </td>
+        <td class="style3">
+        <img id="ctl00_ContentPlaceHolder1_Image3" src="../Img/PW.jpg" height="14" width="16" border="0" />
+            </td>
+        
+    </tr>
+      
+    <tr>
+    
+    <td class="style2"><span id="ctl00_ContentPlaceHolder1_Label2">کد امنیتی :</span></td>
+    <td class="auto-style3">
+        <img id="ctl00_ContentPlaceHolder1_cpt_img" src="Handler.ashx" height="40" width="160" border="0" />
+        <br />
+        <span id="ctl00_ContentPlaceHolder1_RadTextBox3_wrapper" class="riSingle RadInput RadInput_Office2007"><input id="ctl00_ContentPlaceHolder1_RadTextBox3" name="ctl00$ContentPlaceHolder1$RadTextBox3" size="20" class="riTextBox riEnabled" type="text" value="" /><input id="ctl00_ContentPlaceHolder1_RadTextBox3_ClientState" name="ctl00_ContentPlaceHolder1_RadTextBox3_ClientState" type="hidden" /></span>
+
+        </td>
+        <td class="style3">
+            &nbsp;
+        </td>
+        </tr>
+        <tr>
+        <td class="style2">
+        
+        </td>
+        <td class="auto-style2">
+        <span id="ctl00_ContentPlaceHolder1_btmverify" class="RadButton RadButton_Office2007 rbSkinnedButton"><input class="rbDecorated" type="button" name="ctl00$ContentPlaceHolder1$btmverify_input" id="ctl00_ContentPlaceHolder1_btmverify_input" value="ورود" /><input id="ctl00_ContentPlaceHolder1_btmverify_ClientState" name="ctl00_ContentPlaceHolder1_btmverify_ClientState" type="hidden" /></span>
+        </td>
+        <td>
+           </td>
+        </tr>
+    
+    </table>
+        </fieldset>
+
+                </td>
+                <td style="text-align: right">
+                    <!--
+                    <ul>
+                      <li style="color:Green;">کد امنیتی با حروف بزرگ وارد نمایید</li>
+      
+         
+                    </ul>
+                    !-->
+                </td>
+            </tr>
+        </table>
+        
+      </div>
+      
+    <script type="text/javascript" >
+        function kepress()
+        {
+            if (window.event.keyCode == 13)
+            {
+                __doPostBack('verify', '');
+            }
+        }
+           
+
+   </script>
+
+    </div>
+    </td>
+  </tr>
+   <tr>
+  <td>
+    <div id="clear" class="clear"></div>
+  
+    </td>
+  </tr>
+    <tr>
+  <td style="vertical-align:bottom;">
+    <div id="footer">کلیه حقوق این نرم افزار متعلق به شرکت بام پردازش تهران می باشد .
+    <br />
+     <br />
+     Copyright 2005-2013 <a href="http://www.BPTSoft.Com/">BPTSoft</a> Web Solution Group.
+                    All rights reserved
+    </div>
+             </td>
+  </tr>
+      </table>
+
+   
+      
+    
+
+<script type="text/javascript">
+//<![CDATA[
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadAjaxManager, {"_updatePanels":"","ajaxSettings":[],"clientEvents":{OnRequestStart:"",OnResponseEnd:""},"defaultLoadingPanelID":"","enableAJAX":true,"enableHistory":false,"links":[],"styles":[],"uniqueID":"ctl00$ContentPlaceHolder1$RadAjaxManager1","updatePanelsRenderMode":0}, null, null, $get("ctl00_ContentPlaceHolder1_RadAjaxManager1"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadTextBox, {"_displayText":"","_focused":false,"_initialValueAsText":"","_postBackEventReferenceScript":"setTimeout(\"__doPostBack(\\\u0027ctl00$ContentPlaceHolder1$RadTextBox1\\\u0027,\\\u0027\\\u0027)\", 0)","_skin":"Office2007","_validationText":"","clientStateFieldID":"ctl00_ContentPlaceHolder1_RadTextBox1_ClientState","enabled":true,"styles":{HoveredStyle: ["width:160px;", "riTextBox riHover"],InvalidStyle: ["width:160px;", "riTextBox riError"],DisabledStyle: ["width:160px;", "riTextBox riDisabled"],FocusedStyle: ["width:160px;", "riTextBox riFocused"],EmptyMessageStyle: ["width:160px;", "riTextBox riEmpty"],ReadOnlyStyle: ["width:160px;", "riTextBox riRead"],EnabledStyle: ["width:160px;", "riTextBox riEnabled"]}}, null, null, $get("ctl00_ContentPlaceHolder1_RadTextBox1"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadTextBox, {"_focused":false,"_postBackEventReferenceScript":"setTimeout(\"__doPostBack(\\\u0027ctl00$ContentPlaceHolder1$RadTextBox2\\\u0027,\\\u0027\\\u0027)\", 0)","_skin":"Office2007","clientStateFieldID":"ctl00_ContentPlaceHolder1_RadTextBox2_ClientState","enabled":true,"styles":{HoveredStyle: ["width:160px;", "riTextBox riHover"],InvalidStyle: ["width:160px;", "riTextBox riError"],DisabledStyle: ["width:160px;", "riTextBox riDisabled"],FocusedStyle: ["width:160px;", "riTextBox riFocused"],EmptyMessageStyle: ["width:160px;", "riTextBox riEmpty"],ReadOnlyStyle: ["width:160px;", "riTextBox riRead"],EnabledStyle: ["width:160px;", "riTextBox riEnabled"]}}, null, null, $get("ctl00_ContentPlaceHolder1_RadTextBox2"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadTextBox, {"_displayText":"","_focused":false,"_initialValueAsText":"","_postBackEventReferenceScript":"setTimeout(\"__doPostBack(\\\u0027ctl00$ContentPlaceHolder1$RadTextBox3\\\u0027,\\\u0027\\\u0027)\", 0)","_skin":"Office2007","_validationText":"","clientStateFieldID":"ctl00_ContentPlaceHolder1_RadTextBox3_ClientState","enabled":true,"styles":{HoveredStyle: ["width:160px;", "riTextBox riHover"],InvalidStyle: ["width:160px;", "riTextBox riError"],DisabledStyle: ["width:160px;", "riTextBox riDisabled"],FocusedStyle: ["width:160px;", "riTextBox riFocused"],EmptyMessageStyle: ["width:160px;", "riTextBox riEmpty"],ReadOnlyStyle: ["width:160px;", "riTextBox riRead"],EnabledStyle: ["width:160px;", "riTextBox riEnabled"]}}, null, null, $get("ctl00_ContentPlaceHolder1_RadTextBox3"));
+});
+Sys.Application.add_init(function() {
+    $create(Telerik.Web.UI.RadButton, {"_accessKey":"","_postBackReference":"WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions('ctl00$ContentPlaceHolder1$btmverify', '', true, 'SubmitInfo', '', false, true))","_validationGroup":"SubmitInfo","clientStateFieldID":"ctl00_ContentPlaceHolder1_btmverify_ClientState","iconData":{},"imageData":{},"text":"ورود","toggleStatesData":[],"uniqueGroupName":"","uniqueID":"ctl00$ContentPlaceHolder1$btmverify"}, null, null, $get("ctl00_ContentPlaceHolder1_btmverify"));
+});
+//]]>
+</script>
+</form>
+   
+</body>
+</html>
