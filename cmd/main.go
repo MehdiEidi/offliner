@@ -76,7 +76,7 @@ func main() {
 		wp := workerpool.New(*maxWorkers, *maxPage, process)
 		go wp.Run()
 
-		for wp.PageNum < wp.MaxPages {
+		for len(stack) != 0 {
 			link := stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 			wp.AddTask(link)
