@@ -1,10 +1,6 @@
 // Package workerpool just implements a workerpool.
 package workerpool
 
-import (
-	"log"
-)
-
 type Workerpool struct {
 	MaxWorkers int
 	URLQueue   chan string
@@ -21,10 +17,7 @@ func (wp *Workerpool) Start() {
 
 		go func(workerID int) {
 			for url := range wp.URLQueue {
-				err := wp.Task(url, workerID)
-				if err != nil {
-					log.Println("[workerpool] error -", err)
-				}
+				wp.Task(url, workerID)
 			}
 		}(wID)
 	}

@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -13,8 +12,6 @@ import (
 )
 
 func process(url string, workerID int) error {
-	log.Println("worker", workerID, "Visiting:", url)
-
 	res, err := http.Get(url)
 	if err != nil {
 		return err
@@ -46,6 +43,7 @@ func process(url string, workerID int) error {
 func linkHandler(index int, element *goquery.Selection) {
 	href, exists := element.Attr("href")
 
+	// do this??
 	if len(href) > 1 && href[len(href)-1] == '/' {
 		href = href[:len(href)-1]
 	}
@@ -80,6 +78,7 @@ func save(body io.ReadCloser, link string) error {
 	}
 
 	pageNum++
+	bar.Add(1)
 
 	return nil
 }

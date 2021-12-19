@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/MehdiEidi/offliner/pkg/set"
 	"github.com/MehdiEidi/offliner/pkg/stack"
 	"github.com/MehdiEidi/offliner/workerpool"
+	"github.com/schollz/progressbar/v3"
 )
 
 var (
@@ -22,6 +22,9 @@ var (
 
 	// Number of the pages processed. Should keep this number below maxPage.
 	pageNum int
+
+	// Progress bar
+	bar *progressbar.ProgressBar
 )
 
 func main() {
@@ -37,6 +40,9 @@ func main() {
 		log.Fatal("homepage URL cannot be empty.")
 	}
 
+	// Initializing the progress bar.
+	bar = progressbar.Default(int64(*maxPage))
+
 	if err := findBaseDomain(*homepage); err != nil {
 		log.Fatal(err)
 	}
@@ -46,34 +52,24 @@ func main() {
 	}
 
 	// Process the homepage to initially fill the stack of URLs.
-	err := process(*homepage, -1)
-	if err != nil {
-		log.Println(err)
-	}
+	process(*homepage, -1)
 
 	// Choose between serial, multithreaded, or multiprocessing
 	switch {
 	case *serial:
-		log.Println("--serial processing--")
-
 		for urls.Len() != 0 {
 			url, err := urls.Pop()
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			err = process(url, -1)
-			if err != nil {
-				log.Println(err)
-			}
+			process(url, -1)
 		}
 
 	case *useProcesses:
 		// Todo
 
 	default:
-		fmt.Println("--multithreaded processing--")
-
 		wp := workerpool.New(*maxWorkers, process)
 		go wp.Start()
 
