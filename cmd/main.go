@@ -1,34 +1,33 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
-	"os"
-	"strings"
-	"sync"
 
+	"github.com/MehdiEidi/offliner/pkg/set"
+	"github.com/MehdiEidi/offliner/pkg/stack"
 	"github.com/MehdiEidi/offliner/workerpool"
-	"github.com/PuerkitoBio/goquery"
 )
 
 var (
-	// stack of URLs
-	stack []string
+	// Stack of URLs to be processed.
+	urls = stack.New()
 
-	// set of visited URLs
-	visited = make(map[string]bool)
-	lock    sync.Mutex
+	// Set of visited URLs.
+	visited = set.New()
 
+	// We only want to crawl the URLs of the same base domain.
 	baseDomain string
+
+	// Number of the pages processed. Should keep this number below maxPage.
+	pageNum int
 )
 
 func main() {
+	// Defining some flags
 	homepage := flag.String("url", "", "URL of the homepage.")
-	useProcess := flag.Bool("a", false, "If the concurrency must be done using multi processing instead of multi threading.")
+	useProcesses := flag.Bool("a", false, "If the concurrency must be done using multi processing instead of multi threading.")
 	serial := flag.Bool("s", false, "If the crawling must be done in non-concurrent fashion.")
 	maxPage := flag.Int("n", 100, "Max number of pages to save.")
 	maxWorkers := flag.Int("p", 50, "Max number of concurrent execution units.")
@@ -38,144 +37,53 @@ func main() {
 		log.Fatal("homepage URL cannot be empty.")
 	}
 
-	findBase(*homepage)
-
-	// create a separate directory for each link
-	if _, err := os.Stat(baseDomain); os.IsNotExist(err) {
-		err = os.Mkdir(baseDomain, os.ModePerm)
-		if err != nil {
-			log.Fatal(err)
-		}
+	if err := findBaseDomain(*homepage); err != nil {
+		log.Fatal(err)
 	}
 
+	if err := createDir(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Process the homepage to initially fill the stack of URLs.
 	err := process(*homepage, -1)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
-	// serial,multi threading or multi processing ?
+	// Choose between serial, multithreaded, or multiprocessing
 	switch {
 	case *serial:
-		fmt.Println("--serial processing--")
+		log.Println("--serial processing--")
 
-		for len(stack) != 0 {
-			url := stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-
-			err := process(url, -1)
+		for urls.Len() != 0 {
+			url, err := urls.Pop()
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
+			}
+
+			err = process(url, -1)
+			if err != nil {
+				log.Println(err)
 			}
 		}
 
-	case *useProcess:
+	case *useProcesses:
+		// Todo
 
 	default:
-		fmt.Println("--multi threaded processing--")
+		fmt.Println("--multithreaded processing--")
 
-		wp := workerpool.New(*maxWorkers, *maxPage, process)
-		go wp.Run()
+		wp := workerpool.New(*maxWorkers, process)
+		go wp.Start()
 
-		for len(stack) != 0 {
-			link := stack[len(stack)-1]
-			stack = stack[:len(stack)-1]
-			wp.AddTask(link)
+		for pageNum < *maxPage {
+			url, err := urls.Pop()
+			if err != nil {
+				log.Println(err)
+				break
+			}
+			wp.AddTask(url)
 		}
-	}
-}
-
-func process(url string, workerID int) error {
-	fmt.Println("worker", workerID, "Visiting:", url)
-
-	lock.Lock()
-	visited[url] = true
-	lock.Unlock()
-
-	res, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	res.Body = io.NopCloser(bytes.NewBuffer(body))
-
-	document, err := goquery.NewDocumentFromReader(res.Body)
-	if err != nil {
-		return err
-	}
-	document.Find("a").Each(linkHandler)
-
-	res.Body = io.NopCloser(bytes.NewBuffer(body))
-
-	err = save(res.Body, url)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func linkHandler(index int, element *goquery.Selection) {
-	href, ok := element.Attr("href")
-
-	if len(href) > 1 && href[len(href)-1] == '/' {
-		href = href[:len(href)-1]
-	}
-
-	if ok && strings.Contains(href, baseDomain) {
-		lock.Lock()
-		_, ok := visited[href]
-		lock.Unlock()
-		if !ok {
-			lock.Lock()
-			stack = append(stack, href)
-			lock.Unlock()
-		}
-	}
-}
-
-func save(body io.ReadCloser, url string) error {
-	var filename string
-
-	if strings.Contains(url, "http://") {
-		filename = url[7:]
-	} else {
-		filename = url[8:]
-	}
-
-	fields := strings.Split(filename, "/")
-	filename = strings.Join(fields, "-")
-
-	file, err := os.Create(baseDomain + "/" + filename + ".html")
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	_, err = io.Copy(file, body)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func findBase(homepage string) {
-	// remove trailing /
-	if homepage[len(homepage)-1] == '/' {
-		homepage = homepage[:len(homepage)-1]
-	}
-
-	// remove protocol scheme
-	if strings.Contains(homepage, "http://") {
-		baseDomain = homepage[7:]
-	} else if strings.Contains(homepage, "https://") {
-		baseDomain = homepage[8:]
-	} else {
-		baseDomain = homepage
 	}
 }

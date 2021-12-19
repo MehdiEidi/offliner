@@ -7,8 +7,6 @@ import (
 
 type Workerpool struct {
 	MaxWorkers int
-	MaxPages   int
-	PageNum    int
 	URLQueue   chan string
 	Task       func(string, int) error
 }
@@ -17,7 +15,7 @@ func (wp *Workerpool) AddTask(task string) {
 	wp.URLQueue <- task
 }
 
-func (wp *Workerpool) Run() {
+func (wp *Workerpool) Start() {
 	for i := 0; i < wp.MaxWorkers; i++ {
 		wID := i + 1
 
@@ -27,17 +25,14 @@ func (wp *Workerpool) Run() {
 				if err != nil {
 					log.Println("[workerpool] error -", err)
 				}
-
-				wp.PageNum++
 			}
 		}(wID)
 	}
 }
 
-func New(maxWorkers int, maxPages int, task func(string, int) error) Workerpool {
+func New(maxWorkers int, task func(string, int) error) Workerpool {
 	return Workerpool{
 		MaxWorkers: maxWorkers,
-		MaxPages:   maxPages,
 		URLQueue:   make(chan string),
 		Task:       task,
 	}
