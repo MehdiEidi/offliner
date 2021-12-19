@@ -1,4 +1,4 @@
-// Package stack implements a stack data structure for strings.
+// Package stack implements a stack data structure for strings. It uses a slice as its backing data structure.
 package stack
 
 import (
@@ -25,7 +25,7 @@ func (s *Stack) Push(str string) {
 	s.Data = append(s.Data, str)
 }
 
-// Pop removes the top element and returns it. If the stack is empty, it will return an error and empty string.
+// Pop removes the top element and returns it. If the stack is empty, it will return an error and an empty string.
 func (s *Stack) Pop() (string, error) {
 	s.Lock.Lock()
 	defer s.Lock.Unlock()
@@ -33,7 +33,7 @@ func (s *Stack) Pop() (string, error) {
 	l := len(s.Data)
 
 	if l == 0 {
-		return "", errors.New("stack is empty")
+		return "", errors.New("Pop() - stack is empty")
 	}
 
 	str := s.Data[l-1]
@@ -50,7 +50,7 @@ func (s *Stack) Top() (string, error) {
 	l := len(s.Data)
 
 	if l == 0 {
-		return "", errors.New("stack is empty")
+		return "", errors.New("Top() - stack is empty")
 	}
 
 	return s.Data[l-1], nil

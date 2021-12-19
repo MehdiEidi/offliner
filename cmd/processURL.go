@@ -11,24 +11,27 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func process(url string, workerID int) error {
+// processURL gets a URL and a worker ID. It makes a http get request to the URL. It basically does two things with the response body, first it extracts all the links on the page and adds them to the stack, second, it saves the page on the disk.
+func processURL(url string, workerID int) error {
 	res, err := http.Get(url)
 	if err != nil {
 		return err
 	}
 
+	// Because we need to read the body twice (once for extracting links and once for saving the page), we first need to save the body in a []byte. Later we can use this slice to rewind the body.
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
 
+	// NewBuffer returns a Reader value and NopCloser just adds a Closer method on it, making this value a ReadCloser which can get assigned back to the res.Body. In that case we can read the body again.
 	res.Body = io.NopCloser(bytes.NewBuffer(body))
 
 	document, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
 		return err
 	}
-	document.Find("a").Each(linkHandler)
+	document.Find("a").Each(addLink)
 
 	res.Body = io.NopCloser(bytes.NewBuffer(body))
 
@@ -40,7 +43,8 @@ func process(url string, workerID int) error {
 	return nil
 }
 
-func linkHandler(index int, element *goquery.Selection) {
+// addLink checks some criteria about the found link and adds it to the stack and set.
+func addLink(index int, element *goquery.Selection) {
 	href, exists := element.Attr("href")
 
 	// do this??
@@ -63,6 +67,7 @@ func linkHandler(index int, element *goquery.Selection) {
 	}
 }
 
+// save saves the body of the given URL to a file.
 func save(body io.ReadCloser, link string) error {
 	filename, err := makeName(link)
 	if err != nil {
@@ -79,6 +84,7 @@ func save(body io.ReadCloser, link string) error {
 		return err
 	}
 
+	// update the number of the saved pages and progress bar.
 	pageNum++
 	bar.Add(1)
 

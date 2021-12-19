@@ -6,7 +6,6 @@ import (
 
 	"github.com/MehdiEidi/offliner/pkg/set"
 	"github.com/MehdiEidi/offliner/pkg/stack"
-	"github.com/MehdiEidi/offliner/workerpool"
 	"github.com/schollz/progressbar/v3"
 )
 
@@ -23,7 +22,7 @@ var (
 	// Number of the pages processed. Should keep this number below maxPage.
 	pageNum int
 
-	// Progress bar
+	// Progress bar for CLI
 	bar *progressbar.ProgressBar
 )
 
@@ -51,30 +50,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Process the homepage to initially fill the stack of URLs.
-	process(*homepage, -1)
+	urls.Push(*homepage)
 
-	// Choose between serial, multithreaded, or multiprocessing
-	switch {
-	case *serial:
-		for urls.Len() != 0 {
-			url, _ := urls.Pop()
-			process(url, -1)
-		}
-
-	case *useProcesses:
-		// Todo
-
-	default:
-		wp := workerpool.New(*maxWorkers, process)
-		go wp.Start()
-
-		for pageNum < *maxPage {
-			url, err := urls.Pop()
-			if err != nil {
-				continue
-			}
-			wp.AddTask(url)
-		}
-	}
+	// Choose between serial, multithreaded, or multiprocessing depending on the flags.
+	chooseRunningMethod(*serial, *useProcesses, *maxPage, *maxWorkers)
 }
