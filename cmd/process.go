@@ -48,9 +48,11 @@ func linkHandler(index int, element *goquery.Selection) {
 		href = href[:len(href)-1]
 	}
 
-	u, _ := url.Parse(href)
-	if u.Scheme == "" {
-		return
+	u, err := url.Parse(href)
+	if err == nil {
+		if u.Scheme == "" {
+			return
+		}
 	}
 
 	if exists && strings.Contains(href, baseDomain) {

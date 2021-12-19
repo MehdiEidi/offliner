@@ -58,11 +58,7 @@ func main() {
 	switch {
 	case *serial:
 		for urls.Len() != 0 {
-			url, err := urls.Pop()
-			if err != nil {
-				log.Fatal(err)
-			}
-
+			url, _ := urls.Pop()
 			process(url, -1)
 		}
 
@@ -76,8 +72,7 @@ func main() {
 		for pageNum < *maxPage {
 			url, err := urls.Pop()
 			if err != nil {
-				log.Println(err)
-				break
+				continue
 			}
 			wp.AddTask(url)
 		}
