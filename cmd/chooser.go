@@ -12,7 +12,7 @@ func chooseRunningMethod(serial, useProcesses bool, maxPage, maxWorkers int) {
 		}
 
 	case useProcesses:
-		// Todo
+		runMultiProcess()
 
 	default: // default is multithreading
 		wp := workerpool.New(maxWorkers, processURL)
