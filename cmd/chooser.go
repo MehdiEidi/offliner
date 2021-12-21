@@ -12,7 +12,7 @@ func chooseRunningMethod(serial, useProcesses bool, maxPage, maxWorkers int) {
 		}
 
 	case useProcesses:
-		runMultiProcess()
+		runMultiProcess(maxWorkers, maxPage)
 
 	default: // default is multithreading
 		wp := workerpool.New(maxWorkers, processURL)
