@@ -8,9 +8,8 @@ import (
 	"strings"
 )
 
-func runMultiprocess(maxWorkers int, maxPage int) {
+func runMultiprocess(maxWorkers int, maxpage int) {
 	home, _ := urls.Pop()
-
 	processURL(home, 0)
 
 	temp, err := os.OpenFile("../temp/temp.txt", os.O_CREATE|os.O_RDWR, 0644)
@@ -18,65 +17,66 @@ func runMultiprocess(maxWorkers int, maxPage int) {
 		log.Fatal(err)
 	}
 
-	tempMaxPage := maxPage
+	tempMaxpage := maxpage
 
-	if maxPage < maxWorkers {
-		if maxPage > 30 {
-			maxWorkers = 30
-		} else {
-			maxWorkers = maxPage - 1
-		}
+	// Because in each iteration, maxWorkers number of prosesses run concurrently, we cant have more workers than the number of maxpages.
+	if maxpage < maxWorkers {
+		maxWorkers = maxpage
 	}
 
-	for progress.PageNum < maxPage {
-		var urlLines []string
-		cmds := make([]*exec.Cmd, maxWorkers)
+	for progress.Current() < maxpage {
+		processes := make([]*exec.Cmd, maxWorkers)
 
+		// Creating maxWorker number of concurrent processes. Each process scrapes a link.
 		for i := 0; i < maxWorkers; i++ {
-			link, _ := urls.Pop()
-			cmds[i] = exec.Command("./process", link, baseDomain)
-			cmds[i].Start()
+			link, err := urls.Pop()
+			if err != nil {
+				i--
+				continue
+			}
+
+			processes[i] = exec.Command("./process", link, baseDomain)
+			processes[i].Stdout = os.Stdout
+			processes[i].Start()
 		}
 
+		// Waiting for all processes to finish.
 		for i := 0; i < maxWorkers; i++ {
-			cmds[i].Wait()
+			processes[i].Wait()
 		}
 
+		// Read Lines of the processes output in temp file to a slice.
+		var lines []string
 		for i := 0; i < maxWorkers; i++ {
 			scanner := bufio.NewScanner(temp)
 			scanner.Scan()
-			urlLines = append(urlLines, scanner.Text())
+			lines = append(lines, scanner.Text())
 		}
-
-		var u []string
 
 		for i := 0; i < maxWorkers; i++ {
-			t := strings.Split(urlLines[i], " ")
-			for j := 0; j < len(t); j++ {
-				u = append(u, t[j])
+			lineURLs := strings.Split(lines[i], " ")
+			for _, u := range lineURLs {
+				if !visited.Has(u) {
+					visited.Add(u)
+					urls.Push(u)
+				}
 			}
 		}
 
-		for i := 0; i < len(u); i++ {
-			l := u[i]
-			if !visited.Has(l) {
-				urls.Push(l)
-				visited.Add(l)
-			}
-		}
-
+		// Reset the read/write offset of the temp file.
 		temp.Seek(0, 0)
 
 		progress.Add(maxWorkers)
 
-		tempMaxPage -= maxWorkers
-		if tempMaxPage < maxWorkers {
-			maxWorkers = tempMaxPage
+		// Now we have saved maxWorker number of pages. We should update the maxWorkers number for the next iteration.
+		tempMaxpage -= maxWorkers
+		if tempMaxpage < maxWorkers {
+			maxWorkers = tempMaxpage
 		}
 	}
 
-	err = os.Remove("../temp/temp.txt")
-	if err != nil {
+	// Cleanup temp.
+	if err = os.Remove("../temp/temp.txt"); err != nil {
 		log.Fatal(err)
 	}
 }

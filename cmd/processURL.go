@@ -130,7 +130,7 @@ func setHomeURL(link string) error {
 	if err != nil {
 		return err
 	}
-	homeURL = u.Scheme + u.Host
+	homeURL = u.Scheme + "://" + u.Host
 	return nil
 }
 

@@ -22,15 +22,9 @@ func main() {
 	link := os.Args[1]
 	dirName = os.Args[2]
 
-	// var link string
-	// scanner := bufio.NewScanner(os.Stdin)
-	// scanner.Scan()
-	// temp := scanner.Text()
-
-	// t := strings.Split(temp, " ")
-
-	// link = t[0]
-	// dirName = t[1]
+	if link == "" || dirName == "" {
+		log.Fatal("link or directory name cannot be empty")
+	}
 
 	temp, err := os.OpenFile("../temp/temp.txt", os.O_RDWR, 0644)
 	if err != nil {
@@ -39,9 +33,10 @@ func main() {
 
 	processURL(link)
 
-	allUrls := strings.Join(urls.Data, " ")
+	// Join extracted URLs with a space into a string.
+	lines := strings.Join(urls.Data, " ")
 
-	temp.WriteString(allUrls + "\n")
+	temp.WriteString(lines + "\n")
 }
 
 func processURL(url string) error {
@@ -55,18 +50,13 @@ func processURL(url string) error {
 		return err
 	}
 
-	res.Body = io.NopCloser(bytes.NewBuffer(body))
-
-	document, err := goquery.NewDocumentFromReader(res.Body)
+	document, err := goquery.NewDocumentFromReader(bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}
 	document.Find("a").Each(addLink)
 
-	res.Body = io.NopCloser(bytes.NewBuffer(body))
-
-	err = save(res.Body, url)
-	if err != nil {
+	if err = save(bytes.NewBuffer(body), url); err != nil {
 		return err
 	}
 
@@ -76,8 +66,7 @@ func processURL(url string) error {
 func addLink(index int, element *goquery.Selection) {
 	href, exists := element.Attr("href")
 
-	// do this??
-	if len(href) > 1 && href[len(href)-1] == '/' {
+	if href[len(href)-1] == '/' {
 		href = href[:len(href)-1]
 	}
 
@@ -93,14 +82,13 @@ func addLink(index int, element *goquery.Selection) {
 	}
 }
 
-// save saves the body of the given URL to a file.
-func save(body io.ReadCloser, link string) error {
+func save(body io.Reader, link string) error {
 	filename, err := makeName(link)
 	if err != nil {
 		return err
 	}
 
-	file, err := os.Create(dirName + "/" + filename + ".html")
+	file, err := os.Create("../output/" + dirName + "/pages/" + filename + ".html")
 	if err != nil {
 		return err
 	}
