@@ -78,7 +78,7 @@ func savePage(body io.Reader, link string) error {
 		return err
 	}
 
-	file, err := os.Create(baseDomain + "/pages/" + filename + ".html")
+	file, err := os.Create("../output/" + baseDomain + "/pages/" + filename + ".html")
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func makeName(link string) (filename string, err error) {
 // createDirs contains a slice of the directories to be created, then it ranges over the slice and creates those directories.
 func createDirs() error {
 	// Slice of the directories to be created. Order is important.
-	dirs := []string{baseDomain, baseDomain + "/pages/", baseDomain + "/static/", baseDomain + "/static/css/", baseDomain + "/static/js/", baseDomain + "/static/files/"}
+	dirs := []string{"../output/" + baseDomain, "../output/" + baseDomain + "/pages/", "../output/" + baseDomain + "/static/", "../output/" + baseDomain + "/static/css/", "../output/" + baseDomain + "/static/js/", "../output/" + baseDomain + "/static/files/"}
 
 	for _, d := range dirs {
 		if _, err := os.Stat(d); os.IsNotExist(err) {

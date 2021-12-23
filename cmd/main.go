@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"net/url"
 
 	prog "github.com/MehdiEidi/offliner/pkg/progress"
 )
@@ -29,6 +30,16 @@ func main() {
 
 // initialize sets some global variables and initializes some stuff.
 func initialize(homepage string, maxpage int) {
+	u, err := url.Parse(homepage)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// If homeURL has no scheme, default is http.
+	if u.Scheme == "" {
+		homepage = "http://" + homepage
+	}
+
 	if err := setHomeURL(homepage); err != nil {
 		log.Fatal(err)
 	}
