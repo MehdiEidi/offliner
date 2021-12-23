@@ -21,7 +21,6 @@ func New() *Stack {
 func (s *Stack) Push(str string) {
 	s.Lock.Lock()
 	defer s.Lock.Unlock()
-
 	s.Data = append(s.Data, str)
 }
 

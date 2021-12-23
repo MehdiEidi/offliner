@@ -1,7 +1,7 @@
 // Package workerpool implements a workerpool of specific number of workers to apply a single task on a queue of URLs which are passed using a channel of string.
 package workerpool
 
-// Workerpool contains the max number of workers, a channel of string acting as the task queue which will contain URLs, and a function which acts as the worker that will apply on the URLs.
+// Workerpool contains the max number of workers, a channel of strings acting as the task queue which will contain URLs, and a function which acts as the worker that will be applied on the URLs.
 type Workerpool struct {
 	MaxWorkers int
 	URLQueue   chan string
@@ -22,7 +22,7 @@ func (wp *Workerpool) AddTask(task string) {
 	wp.URLQueue <- task
 }
 
-// Start spins maxWorker number of goroutines. Each goroutine ranges over the task channel, fetches tasks (URLs), and applies the Worker() on it.
+// Start creates MaxWorker number of goroutines. Each goroutine ranges over the task channel, fetches tasks (URLs), and applies the Worker() on it.
 func (wp *Workerpool) Start() {
 	for i := 0; i < wp.MaxWorkers; i++ {
 		wID := i + 1

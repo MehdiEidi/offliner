@@ -2,23 +2,23 @@ package main
 
 import "github.com/MehdiEidi/offliner/workerpool"
 
-// chooseRunningMethod chooses between serial, multithreaded, or multiprocessing depending on the flags.
-func chooseRunningMethod(serial, useProcesses bool, maxPage, maxWorkers int) {
+// chooseExecMethod chooses between serial, multithreaded, or multiprocessing depending on the flags.
+func chooseExecMethod(serial, multiprocess bool, maxpage, maxWorkers int) {
 	switch {
 	case serial:
-		for urls.Len() != 0 && pageNum < maxPage {
+		for urls.Len() != 0 && progress.PageNum < maxpage {
 			url, _ := urls.Pop()
 			processURL(url, 0)
 		}
 
-	case useProcesses:
-		runMultiProcess(maxWorkers, maxPage)
+	case multiprocess:
+		runMultiprocess(maxWorkers, maxpage)
 
 	default: // default is multithreading
 		wp := workerpool.New(maxWorkers, processURL)
 		go wp.Start()
 
-		for pageNum < maxPage {
+		for progress.PageNum < maxpage {
 			url, err := urls.Pop()
 			if err != nil {
 				continue

@@ -4,34 +4,15 @@ import (
 	"flag"
 	"log"
 
-	"github.com/MehdiEidi/offliner/pkg/set"
-	"github.com/MehdiEidi/offliner/pkg/stack"
-	"github.com/schollz/progressbar/v3"
-)
-
-var (
-	// Stack of URLs to be processed.
-	urls = stack.New()
-
-	// Set of visited URLs.
-	visited = set.New()
-
-	// We only want to crawl the URLs of the same base domain.
-	baseDomain string
-
-	// Number of the pages processed. Should keep this number below maxPage.
-	pageNum int
-
-	// Progress bar for CLI
-	bar *progressbar.ProgressBar
+	prog "github.com/MehdiEidi/offliner/pkg/progress"
 )
 
 func main() {
 	// Defining some flags
 	homepage := flag.String("url", "", "URL of the homepage.")
-	useProcesses := flag.Bool("a", false, "If the concurrency must be done using multi processing instead of multi threading.")
+	multiprocess := flag.Bool("a", false, "If the concurrency must be done using multi processing instead of multi threading.")
 	serial := flag.Bool("s", false, "If the crawling must be done in non-concurrent fashion.")
-	maxPage := flag.Int("n", 100, "Max number of pages to save.")
+	maxpage := flag.Int("n", 100, "Max number of pages to save.")
 	maxWorkers := flag.Int("p", 50, "Max number of concurrent execution units.")
 	flag.Parse()
 
@@ -39,19 +20,29 @@ func main() {
 		log.Fatal("homepage URL cannot be empty.")
 	}
 
-	// Initializing the progress bar.
-	bar = progressbar.Default(int64(*maxPage))
-
-	if err := findBaseDomain(*homepage); err != nil {
-		log.Fatal(err)
-	}
-
-	if err := createDir(); err != nil {
-		log.Fatal(err)
-	}
-
-	urls.Push(*homepage)
+	// Some initialization done.
+	initialize(*homepage, *maxpage)
 
 	// Choose between serial, multithreaded, or multiprocessing depending on the flags.
-	chooseRunningMethod(*serial, *useProcesses, *maxPage, *maxWorkers)
+	chooseExecMethod(*serial, *multiprocess, *maxpage, *maxWorkers)
+}
+
+// initialize sets some global variables and initializes some stuff.
+func initialize(homepage string, maxpage int) {
+	if err := setHomeURL(homepage); err != nil {
+		log.Fatal(err)
+	}
+
+	if err := setBaseDomain(homepage); err != nil {
+		log.Fatal(err)
+	}
+
+	// Creating necessary directories.
+	if err := createDirs(); err != nil {
+		log.Fatal(err)
+	}
+
+	progress = prog.New(maxpage)
+
+	urls.Push(homepage)
 }

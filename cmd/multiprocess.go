@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func runMultiProcess(maxWorkers int, maxPage int) {
+func runMultiprocess(maxWorkers int, maxPage int) {
 	home, _ := urls.Pop()
 
 	processURL(home, 0)
@@ -28,7 +28,7 @@ func runMultiProcess(maxWorkers int, maxPage int) {
 		}
 	}
 
-	for pageNum < maxPage {
+	for progress.PageNum < maxPage {
 		var urlLines []string
 		cmds := make([]*exec.Cmd, maxWorkers)
 
@@ -67,11 +67,16 @@ func runMultiProcess(maxWorkers int, maxPage int) {
 
 		temp.Seek(0, 0)
 
-		pageNum += maxWorkers
+		progress.Add(maxWorkers)
 
 		tempMaxPage -= maxWorkers
 		if tempMaxPage < maxWorkers {
 			maxWorkers = tempMaxPage
 		}
+	}
+
+	err = os.Remove("../temp/temp.txt")
+	if err != nil {
+		log.Fatal(err)
 	}
 }
