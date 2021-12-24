@@ -26,9 +26,9 @@ func runMultiprocess2(maxWorkers, maxpage int) {
 
 		sockets := make([]net.Listener, maxWorkers)
 		for i := 0; i < maxWorkers; i++ {
-			colNum := strconv.Itoa(i)
+			connNum := strconv.Itoa(i)
 			var err error
-			sockets[i], err = net.Listen("unix", "/tmp/ipc"+colNum+".sock")
+			sockets[i], err = net.Listen("unix", "/tmp/ipc"+connNum+".sock")
 			if err != nil {
 				log.Println(err)
 			}
@@ -57,11 +57,12 @@ func runMultiprocess2(maxWorkers, maxpage int) {
 		}
 
 		for i := 0; i < maxWorkers; i++ {
-			var line []byte
 			if conns[i] == nil {
 				i--
 				continue
 			}
+
+			var line []byte
 			conns[i].Read(line)
 
 			collectLinks(string(line))

@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	urls    *stack.Stack
+	urls    = stack.New()
 	dirName string
 )
 
@@ -29,7 +29,6 @@ func main() {
 		log.Fatal("In worker", err)
 	}
 
-	urls = stack.New()
 	processURL(link)
 
 	line := strings.Join(urls.Data, " ")
