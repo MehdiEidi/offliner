@@ -45,7 +45,7 @@ func runMultiprocess(maxWorkers int, maxpage int) {
 			processes[i].Wait()
 		}
 
-		// Read Lines of the processes output in temp file to a slice.
+		// Read lines of the processes output in temp file to a slice.
 		var lines []string
 		for i := 0; i < maxWorkers; i++ {
 			scanner := bufio.NewScanner(temp)
