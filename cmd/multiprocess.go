@@ -1,82 +1,114 @@
 package main
 
 import (
-	"bufio"
 	"log"
+	"net"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
+	"sync"
 )
 
-func runMultiprocess(maxWorkers int, maxpage int) {
-	home, _ := urls.Pop()
-	processURL(home, 0)
+func runMultiprocess(maxWorkers, maxpage int) {
+	home, _ := urls.Dequeue()
+	processURL(home)
+	progress.Add(1)
 
-	temp, err := os.OpenFile("../temp/temp.txt", os.O_CREATE|os.O_RDWR, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
+	remainingPage := maxpage - 1
 
-	tempMaxpage := maxpage
-
-	// Because in each iteration, maxWorkers number of prosesses run concurrently, we cant have more workers than the number of maxpages.
-	if maxpage < maxWorkers {
-		maxWorkers = maxpage
+	if remainingPage < maxWorkers {
+		maxWorkers = remainingPage
 	}
 
 	for progress.Current() < maxpage {
-		processes := make([]*exec.Cmd, maxWorkers)
-
-		// Creating maxWorker number of concurrent processes. Each process scrapes a link.
+		sockets := make([]net.Listener, maxWorkers)
 		for i := 0; i < maxWorkers; i++ {
-			link, err := urls.Pop()
+			connNum := strconv.Itoa(i)
+
+			var err error
+			sockets[i], err = net.Listen("unix", "/tmp/ipc"+connNum+".sock")
+			if err != nil {
+				log.Println(err)
+			}
+		}
+
+		var wg sync.WaitGroup
+
+		conns := make([]net.Conn, maxWorkers)
+		for i := 0; i < maxWorkers; i++ {
+			wg.Add(1)
+			go func(connNum int) {
+				var err error
+				conns[connNum], err = sockets[connNum].Accept()
+				if err != nil {
+					log.Println(err)
+				}
+
+				wg.Done()
+			}(i)
+		}
+
+		processes := make([]*exec.Cmd, maxWorkers)
+		for i := 0; i < maxWorkers; i++ {
+			link, err := urls.Dequeue()
 			if err != nil {
 				i--
 				continue
 			}
 
-			processes[i] = exec.Command("./process", link, baseDomain)
+			connNum := strconv.Itoa(i)
+
+			processes[i] = exec.Command("./process", link, baseDomain, connNum)
 			processes[i].Stdout = os.Stdout
 			processes[i].Start()
 		}
 
-		// Waiting for all processes to finish.
+		wg.Wait()
+
+		for i := 0; i < maxWorkers; i++ {
+			if conns[i] != nil {
+				var line []byte
+				_, err := conns[i].Read(line)
+				if err != nil {
+					continue
+				}
+
+				collectLinks(string(line))
+			} else {
+				continue
+			}
+		}
+
 		for i := 0; i < maxWorkers; i++ {
 			processes[i].Wait()
 		}
 
-		// Read lines of the processes output in temp file to a slice.
-		var lines []string
 		for i := 0; i < maxWorkers; i++ {
-			scanner := bufio.NewScanner(temp)
-			scanner.Scan()
-			lines = append(lines, scanner.Text())
+			sockets[i].Close()
 		}
-
-		for i := 0; i < maxWorkers; i++ {
-			lineURLs := strings.Split(lines[i], " ")
-			for _, u := range lineURLs {
-				if !visited.Has(u) {
-					visited.Add(u)
-					urls.Push(u)
-				}
-			}
-		}
-
-		// Reset the read/write offset of the temp file.
-		temp.Seek(0, 0)
 
 		progress.Add(maxWorkers)
 
-		// Now we have saved maxWorker number of pages. We should update the maxWorkers number for the next iteration.
-		tempMaxpage -= maxWorkers
-		if tempMaxpage < maxWorkers {
-			maxWorkers = tempMaxpage
+		remainingPage -= maxWorkers
+		if remainingPage < maxWorkers {
+			maxWorkers = remainingPage
 		}
 	}
 
-	// Cleanup temp.
-	if err = os.Remove("../temp/temp.txt"); err != nil {
-		log.Fatal(err)
+	defer func() {
+		for i := 0; i < maxWorkers; i++ {
+			os.Remove("/tmp/ipc" + strconv.Itoa(i) + ".sock")
+		}
+	}()
+}
+
+func collectLinks(line string) {
+	lineURLs := strings.Split(line, " ")
+	for _, u := range lineURLs {
+		if !visited.Has(u) {
+			visited.Add(u)
+			urls.Enqueue(u)
+		}
 	}
 }

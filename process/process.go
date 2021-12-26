@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -14,29 +15,26 @@ import (
 )
 
 var (
-	urls    = stack.New()
-	dirName string
+	urls       = stack.New()
+	baseDomain string
 )
 
 func main() {
 	link := os.Args[1]
-	dirName = os.Args[2]
-
-	if link == "" || dirName == "" {
-		log.Fatal("link or directory name cannot be empty")
-	}
-
-	temp, err := os.OpenFile("../temp/temp.txt", os.O_RDWR, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
+	baseDomain = os.Args[2]
+	connNum := os.Args[3]
 
 	processURL(link)
 
-	// Join extracted URLs with a space into a string.
-	lines := strings.Join(urls.Data, " ")
+	sendSocket, err := net.Dial("unix", "/tmp/ipc"+connNum+".sock")
+	if err != nil {
+		log.Fatal("In worker ", err)
+	}
+	defer sendSocket.Close()
 
-	temp.WriteString(lines + "\n")
+	line := strings.Join(urls.Data, " ")
+
+	sendSocket.Write([]byte(line))
 }
 
 func processURL(url string) error {
@@ -66,19 +64,22 @@ func processURL(url string) error {
 func addLink(index int, element *goquery.Selection) {
 	href, exists := element.Attr("href")
 
-	if href[len(href)-1] == '/' {
-		href = href[:len(href)-1]
-	}
+	if exists && href != "" {
+		if len(href) > 0 && href[len(href)-1] == '/' {
+			href = href[:len(href)-1]
+		}
+		u, err := url.Parse(href)
+		if err != nil {
+			return
+		}
 
-	u, err := url.Parse(href)
-	if err == nil {
 		if u.Scheme == "" {
 			return
 		}
-	}
 
-	if exists && strings.Contains(href, dirName) {
-		urls.Push(href)
+		if strings.Contains(href, baseDomain) {
+			urls.Push(href)
+		}
 	}
 }
 
@@ -88,7 +89,7 @@ func save(body io.Reader, link string) error {
 		return err
 	}
 
-	file, err := os.Create("../output/" + dirName + "/pages/" + filename + ".html")
+	file, err := os.Create("../output/" + baseDomain + "/pages/" + filename + ".html")
 	if err != nil {
 		return err
 	}
@@ -106,6 +107,7 @@ func makeName(link string) (filename string, err error) {
 	if err != nil {
 		return "", err
 	}
+
 	u.Scheme = ""
 
 	filename = u.String()[2:]

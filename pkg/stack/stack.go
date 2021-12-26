@@ -57,5 +57,7 @@ func (s *Stack) Top() (string, error) {
 
 // Len returns the number of elements on the stack.
 func (s *Stack) Len() int {
+	s.Lock.Lock()
+	defer s.Lock.Unlock()
 	return len(s.Data)
 }
