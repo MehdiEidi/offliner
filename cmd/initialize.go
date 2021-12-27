@@ -8,7 +8,7 @@ import (
 	prog "github.com/MehdiEidi/offliner/pkg/progress"
 )
 
-// initialize sets some global variables and initializes some stuff.
+// initialize sets some global variables, checks some criteria, and initializes some stuff.
 func initialize(homepage string, maxworkers, maxpages int, multiprocess, serial, withfiles bool) {
 	flags = allFlags{
 		HomePage:     homepage,
@@ -29,7 +29,6 @@ func initialize(homepage string, maxworkers, maxpages int, multiprocess, serial,
 	}
 
 	baseDomain = u.Host
-	rootURL = u.Scheme + "://" + u.Host
 
 	// Creating necessary directories.
 	if err := createDirs(); err != nil {
@@ -39,12 +38,13 @@ func initialize(homepage string, maxworkers, maxpages int, multiprocess, serial,
 	progress = prog.New(maxpages)
 
 	urls.Enqueue(homepage)
+	visited.Add(homepage)
 }
 
 // createDirs contains a slice of the directories to be created, it ranges over the slice and creates those directories.
 func createDirs() error {
 	// Slice of the directories to be created. Order is important.
-	dirs := []string{"../output/", "../output/" + baseDomain, "../output/" + baseDomain + "/pages/", "../output/" + baseDomain + "/static/", "../output/" + baseDomain + "/static/css/", "../output/" + baseDomain + "/static/js/", "../output/" + baseDomain + "/static/files/", "../output/" + baseDomain + "/static/img/"}
+	dirs := []string{"../output/", "../output/" + baseDomain, "../output/" + baseDomain + "/pages/", "../output/" + baseDomain + "/static/", "../output/" + baseDomain + "/static/css/", "../output/" + baseDomain + "/static/js/", "../output/" + baseDomain + "/static/img/"}
 
 	for _, d := range dirs {
 		if _, err := os.Stat(d); os.IsNotExist(err) {

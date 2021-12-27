@@ -16,9 +16,6 @@ var (
 	// We only want to crawl the URLs of the same base domain.
 	baseDomain string
 
-	// URL of the homepage (root).
-	rootURL string
-
 	// Given command line flags.
 	flags allFlags
 
