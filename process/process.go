@@ -168,11 +168,6 @@ func makeURLAbsolute(href string, currentPageURL string) (string, error) {
 				href = rootURL + href
 			}
 		} else {
-			// if currentPageURL[len(currentPageURL)-1] == '/' {
-			// 	href = currentPageURL + href
-			// } else {
-			// 	href = currentPageURL + "/" + href
-			// }
 			if rootURL[len(rootURL)-1] == '/' {
 				href = rootURL + href
 			} else {

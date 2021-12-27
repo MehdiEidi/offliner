@@ -10,13 +10,14 @@ import (
 	"sync"
 )
 
-// runMultiprocess starts scraping in a multiprocess fashion. It first scrapes the homepage filling the queue. It creates Unix sockets for each worker and runs the workers to scrape a single URL. Workers return extracted URLs via the Unix socket and they get collected.
+// runMultiprocess starts concurrent scraping in a multiprocess fashion. It first scrapes the homepage filling the queue. It creates Unix sockets for each worker and starts the workers to scrape a single URL. Workers return extracted URLs via the Unix socket in form of space separated string.
 func runMultiprocess(maxWorkers, maxpage int) {
 	home, _ := urls.Dequeue()
 	processURL(home)
 
 	remainingPage := maxpage - 1
 
+	// In each iteration, maxWorkers number of pages get processed, so, if we have more workers than pages, we are going to end up processing more pages than desired.
 	if remainingPage < maxWorkers {
 		maxWorkers = remainingPage
 	}
@@ -26,6 +27,7 @@ func runMultiprocess(maxWorkers, maxpage int) {
 	}
 
 	for progress.Current() < maxpage {
+		// Creating sockets for each worker, the loop number is the ID of the socket.
 		sockets := make([]net.Listener, maxWorkers)
 		for i := 0; i < maxWorkers; i++ {
 			connNum := strconv.Itoa(i)
@@ -39,6 +41,7 @@ func runMultiprocess(maxWorkers, maxpage int) {
 
 		var wg sync.WaitGroup
 
+		// Start accepting connections from the workers. Each worker will use the ID to connect to the appropriate socket.
 		conns := make([]net.Conn, maxWorkers)
 		for i := 0; i < maxWorkers; i++ {
 			wg.Add(1)
@@ -55,6 +58,7 @@ func runMultiprocess(maxWorkers, maxpage int) {
 
 		wg.Wait()
 
+		// Starting the workers. For each worker, a link is taken from the queue and sent to it as a command line argument.
 		processes := make([]*exec.Cmd, maxWorkers)
 		for i := 0; i < maxWorkers; i++ {
 			link, _ := urls.Dequeue()
@@ -66,6 +70,7 @@ func runMultiprocess(maxWorkers, maxpage int) {
 			processes[i].Start()
 		}
 
+		// Iterating over the connections, reading, and collecting the data in which workers have been written. The data is a space separated line of URLs.
 		for i := 0; i < maxWorkers; i++ {
 			if conns[i] != nil {
 				line := make([]byte, 1000000)
@@ -101,8 +106,10 @@ func runMultiprocess(maxWorkers, maxpage int) {
 	}
 }
 
+// collectLinks gets a line of space separated URLs, splits them into a slice, ranges over the slice, and adds the URLs to the queue if hasn't been visited before.
 func collectLinks(line string) {
 	lineURLs := strings.Split(line, " ")
+
 	for _, u := range lineURLs {
 		if !visited.Has(u) {
 			visited.Add(u)

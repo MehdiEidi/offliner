@@ -106,31 +106,6 @@ func saveImg(link string) error {
 	return nil
 }
 
-// saveFile makes a get req to the given link. It then saves the content to the disk.
-// func saveFile(link string) error {
-// 	res, err := http.Get(link)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	filename, err := makeName(link)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	file, err := os.Create("../output/" + baseDomain + "/static/files/" + filename)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer file.Close()
-
-// 	if _, err = io.Copy(file, res.Body); err != nil {
-// 		return err
-// 	}
-
-// 	return nil
-// }
-
 // makeName constructs a savable name for a file out of the given URL.
 func makeName(link string) (filename string, err error) {
 	u, err := url.Parse(link)
