@@ -28,7 +28,7 @@ func (p *Progress) Add(delta int) {
 	p.Lock.Lock()
 	defer p.Lock.Unlock()
 
-	p.PageNum++
+	p.PageNum += delta
 	p.Bar.Add(delta)
 }
 
