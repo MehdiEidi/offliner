@@ -29,7 +29,7 @@ func (p *Progress) Add(delta int) {
 	defer p.Lock.Unlock()
 
 	p.PageNum++
-	p.Bar.Add(1)
+	p.Bar.Add(delta)
 }
 
 // Current returns the current number of pages processed.
